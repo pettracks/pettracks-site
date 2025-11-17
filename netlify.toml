@@ -1,0 +1,9 @@
+[functions]
+  directory = "netlify/functions"
+
+[[plugins]]
+  package = "@netlify/plugin-emails"
+
+[[events]]
+  event = "submission_created"
+  function = "send-confirmation"
