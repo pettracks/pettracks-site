@@ -263,6 +263,15 @@
     font-size:.78rem;
     font-weight:600;
   }
+/* Hide dropdown menus unless the dropdown is "open" */
+.dropdown:not(.open) .dropdown-menu {
+  display: none;
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
 </style>
 </head>
 
@@ -756,6 +765,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
   attachDropdownToggle("dropdown-personality");
   attachDropdownToggle("dropdown-descriptors");
   attachDropdownToggle("dropdown-favs");
+
+// CLOSE ALL DROPDOWNS ON LOAD
+document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
 
   /* Tier toggle */
   document.querySelectorAll('input[name="tier"]').forEach(r=>{
