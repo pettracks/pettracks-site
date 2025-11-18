@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pet Tracks – Song & Album Cover Request</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- GLOBAL STYLES -->
+  <style>
+    :root {
+      --bg:#f6f7ff;
+      --card:#fff;
+      --text:#202236;
+      --muted:#6f7291;
+      --accent:#5b5fff;
+      --radius:14px;
+      --warn:#b23b3b;
+      --ok:#1a7f37;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header { padding:1.4rem 1rem; text-align:center; }
+
+    .container {
+      max-width:1100px;
+      margin:0 auto 3rem;
+      padding:0 1rem;
+      display:grid;
+      gap:1.25rem;
+      grid-template-columns:1.1fr .9fr;
+    }
+    @media(max-width:920px) {
+      .container { grid-template-columns:1fr; }
+    }
+
+    .card {
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:1.1rem 1.2rem 1.4rem;
+      box-shadow:0 12px 30px rgba(0,0,0,.05);
+    }
+
+    h1 { margin:0 0 .25rem; font-size:1.5rem; }
+    .subtitle { margin:0; color:var(--muted); }
+
+    .section-title {
+      margin:.9rem 0 .5rem;
+      font-size:.85rem;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    label { display:block; font-weight:600; margin:.5rem 0 .25rem; }
+
+    input,select,textarea {
+      width:100%;
+      padding:.5rem .6rem;
+      border:1px solid #d9daf2;
+      border-radius:10px;
+      font-size:.95rem;
+      background:#fff;
+    }
+
+    input[type=file] { padding:.35rem; }
+    textarea { min-height:64px; resize:vertical; }
+
+    .two-col {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:.9rem;
+    }
+    @media(max-width:560px) {
+      .two-col { grid-template-columns:1fr; }
+    }
+
+    .tier-row {
+      display:flex;
+      gap:1rem;
+      flex-wrap:wrap;
+    }
+
+    .tier {
+      background:#eef0ff;
+      border:1px solid #d9daf2;
+      border-radius:12px;
+      padding:.6rem .75rem;
+      display:flex;
+      align-items:center;
+      gap:.45rem;
+      cursor:pointer;
+    }
+
+    .price-display { font-weight:700; margin:.4rem 0 .2rem; }
+
+    .choice-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:.5rem;
+    }
+    @media(max-width:680px) {
+      .choice-grid { grid-template-columns:1fr; }
+    }
+
+    .choice {
+      background:#f8f8ff;
+      border:1px solid #e4e4ff;
+      border-radius:10px;
+      padding:.5rem .6rem;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .muted { color:var(--muted); font-size:.88rem; }
+    .small-note { color:var(--muted); font-size:.8rem; }
+    .pill {
+      background:#eef0ff;
+      padding:.15rem .5rem;
+      border-radius:999px;
+      font-size:.8rem;
+    }
+
+    .output-title {
+      font-weight:700;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:.3rem;
+    }
+
+    .output-box {
+      background:#f8f8ff;
+      border:1px solid #e4e4ff;
+      border-radius:10px;
+      padding:.75rem;
+      font-size:.9rem;
+      white-space:pre-wrap;
+      min-height:110px;
+    }
+
+    .meta {
+      font-size:.82rem;
+      color:var(--muted);
+      margin-top:.35rem;
+      display:flex;
+      gap:.75rem;
+    }
+
+    .hidden { display:none; }
+    .disabled { opacity:.45; pointer-events:none; }
+
+    button {
+      background:var(--accent);
+      color:#fff;
+      border:0;
+      border-radius:999px;
+      padding:.6rem 1rem;
+      font-weight:700;
+      cursor:pointer;
+      margin-top:1rem;
+    }
+
+    button.secondary {
+      background:#fff;
+      color:var(--text);
+      border:1px solid #ddd;
+      border-radius:10px;
+    }
+
+    .error { color:var(--warn); font-size:.9rem; margin-top:.35rem; }
+    .ok { color:var(--ok); font-size:.9rem; margin-top:.35rem; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Pet Tracks – Song & Album Cover Request</h1>
+  <p class="subtitle">Quick selections → polished AI prompts for music & art.</p>
+</header>
+
+<main class="container">
+  <!-- LEFT: FORM -->
+  <section class="card">
+
+    <!-- ⭐ IMPORTANT: FORMSPREE INTEGRATION -->
+    <form id="pettracksForm"
+          action="https://formspree.io/f/xkgyonnr"
+          method="POST"
+          enctype="multipart/form-data"
+          onsubmit="return buildPromptsBeforeSubmit()">
+
+      <!-- CUSTOMER INFO -->
+      <div class="section-title">Customer</div>
+      <label>Your name *</label>
+      <input id="customerName" name="Customer Name"
+             required placeholder="e.g., John Doe" />
+
+      <label>Email *</label>
+      <input id="customerEmail" name="email" type="email"
+             required placeholder="you@example.com" />
+      <!-- PACKAGE SELECTION -->
+      <div class="section-title">Choose your package</div>
+      <div class="price-display" id="priceDisplay">Current total: $19.99</div>
+
+      <div class="tier-row">
+        <label class="tier">
+          <input type="radio" name="tier" value="song" checked />
+          <span><strong>Paw Single</strong> — 1–2 Minute Song
+            <span class="pill">$19.99</span></span>
+        </label>
+
+        <label class="tier">
+          <input type="radio" name="tier" value="song+cover" />
+          <span><strong>Paw Deluxe</strong> — Song + Album Cover
+            <span class="pill">$29.99</span></span>
+        </label>
+      </div>
+
+      <!-- PET INFO -->
+      <div class="section-title">About your pet</div>
+
+      <label>Pet name *</label>
+      <input id="petName" name="Pet Name" required placeholder="e.g., Buddy" />
+
+      <label>Phonetic pronunciation (optional)</label>
+      <input id="petPronounce" name="Phonetic" placeholder="e.g., BUD-ee" />
+
+      <div class="two-col">
+        <div>
+          <label>Species *</label>
+          <select id="species" name="Species" required>
+            <option>Dog</option>
+            <option>Cat</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Breed</label>
+          <input id="breed" name="Breed" placeholder="e.g., Golden Retriever" />
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <label>Age (optional)</label>
+          <input id="age" name="Age" placeholder="e.g., 4 years" />
+        </div>
+
+        <div>
+          <label>Gender</label>
+          <select id="gender" name="Gender">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Unknown / Other</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Physical Description (fur color, size, markings)</label>
+      <input id="physicalDescription"
+             name="Physical Description"
+             placeholder="e.g., golden yellow coat, medium size" />
+
+      <!-- PERSONALITY + DESCRIPTORS -->
+      <div class="section-title">
+        Personality Keywords <span class="muted">(Pick 3)</span>
+      </div>
+      <div id="personalityWords" class="choice-grid"></div>
+
+      <div class="section-title" style="margin-top:.7rem;">
+        What Words Best Describe Your Pet? <span class="muted">(Pick 3)</span>
+      </div>
+      <div id="describeWords" class="choice-grid"></div>
+
+      <div class="section-title" style="margin-top:.7rem;">
+        Favorite Things to Do <span class="muted">(Pick 2–3)</span>
+      </div>
+      <div id="favThings" class="choice-grid"></div>
+
+      <label style="margin-top:.6rem;">
+        Something Special or Unique About Your Pet (1–2 sentences) (Optional)
+      </label>
+      <textarea id="special" name="Something Special" maxlength="240"
+                placeholder='e.g., We call him Bubba Wubba and he does happy zoomies when excited.'></textarea>
+
+      <!-- SONG PREFS -->
+      <div class="section-title">Song Preferences</div>
+
+      <div class="two-col">
+        <div>
+          <label>Genre *</label>
+          <select id="genre" name="Genre" required>
+            <option>Happy Pop</option>
+            <option>Country</option>
+            <option>Rock</option>
+            <option>Acoustic/Folk</option>
+            <option>Hip-Hop</option>
+            <option>R&B</option>
+            <option>Classical</option>
+            <option>Jazz</option>
+            <option>Children's Song</option>
+            <option>EDM</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Song Title (Optional)</label>
+          <input id="songTitle" name="Song Title"
+                 placeholder='e.g., "Buddy the Bandit"' />
+        </div>
+      </div>
+
+      <!-- ALBUM COVER (TIER-BASED) -->
+      <div class="section-title">Album Cover (Paw Deluxe)</div>
+      <div id="albumFields" class="disabled">
+
+        <label>Upload pet photo *</label>
+        <input type="file" id="petPhoto" name="Pet Photo" accept="image/*" />
+
+        <span class="small-note">Required for Paw Deluxe to preserve likeness.</span>
+
+        <label style="margin-top:.6rem;">Extra Elements (Optional)</label>
+        <input id="extras" name="Extra Elements"
+               placeholder="e.g., sunglasses, gold chain, neon lights" />
+
+        <div id="albumError" class="error hidden"></div>
+      </div>
+
+      <!-- ⭐ HIDDEN FIELDS FOR PROMPTS (BUILT BY JS BEFORE SUBMIT) -->
+      <input type="hidden" id="hiddenSongPrompt" name="Song Prompt" />
+      <input type="hidden" id="hiddenArtPrompt" name="Album Cover Prompt" />
+
+      <!-- ⭐ REDIRECT FOR FORMSPREE -->
+      <input type="hidden" name="_redirect"
+             value="https://pettracks.github.io/pettracks-site/thankyou.html" />
+
+      <!-- FORM ERRORS -->
+      <div id="formError" class="error hidden"></div>
+      <div id="formOk" class="ok hidden"></div>
+
+      <button type="submit" id="generateBtn">Submit Order</button>
+    </form>
+  </section>
+
+  <!-- RIGHT PANEL REMOVED -->
+</main>
+<!-- ⭐ JAVASCRIPT SECTION -->
+<script>
+/* ---------- Option sets (duplicate-free) ---------- */
+const PERSONALITY_OPTIONS = [
+  "full of attitude","gentle","energetic","calm","loyal","smart","mischievous",
+  "protective","confident","shy","brave","affectionate","independent","social","patient","curious"
+];
+
+const DESCRIBE_OPTIONS = [
+  "playful","goofy","cuddly","sweet","sassy","chill","adventurous",
+  "clumsy","attentive","dignified","spirited","friendly","bold","loving","quirky"
+];
+
+const FAVORITE_OPTIONS = [
+  "playing","sleeping","eating treats","going for walks","cuddling","chasing toys",
+  "swimming","exploring","fetching","car rides","zoomies","digging","sunbathing",
+  "playing tug-of-war","learning tricks"
+];
+
+/* ---------- Genre style cues ---------- */
+function songStyleForGenre(g){
+  g=(g||"").toLowerCase();
+  if(g.includes("happy pop")) return "bright, upbeat pop song";
+  if(g.includes("country"))   return "warm, story-driven country song";
+  if(g.includes("rock"))      return "energetic rock anthem";
+  if(g.includes("acoustic"))  return "natural acoustic folk tune";
+  if(g.includes("hip-hop"))   return "confident hip-hop track";
+  if(g.includes("r&b"))       return "smooth R&B groove";
+  if(g.includes("classical")) return "cinematic orchestral piece";
+  if(g.includes("jazz"))      return "cool jazz number";
+  if(g.includes("children"))  return "fun, sing-along children’s song";
+  if(g.includes("edm"))       return "high-energy EDM dance track";
+  return "upbeat pop song";
+}
+
+function artStyleForGenre(g){
+  g=(g||"").toLowerCase();
+
+  if(g.includes("happy pop"))
+    return "vibrant pop-art cover with colorful gradients, glossy lighting, and the pet posing playfully like a cheerful pop icon";
+
+  if(g.includes("country"))
+    return "rustic countryside poster style with warm sunlight, soft grain, and the pet posed proudly like a country star in a scenic outdoor setting";
+
+  if(g.includes("rock"))
+    return "bold stage-light design with gritty shadows, dramatic contrast, and the pet in an energetic rock-star pose—like holding a guitar or standing center-stage";
+
+  if(g.includes("acoustic"))
+    return "earthy, minimalist hand-drawn aesthetic with soft pastels and the pet sitting calmly beside an acoustic guitar or in a warm folk-inspired scene";
+
+  if(g.includes("hip-hop"))
+    return "urban street-art aesthetic with graffiti textures and the pet standing upright in a confident anthropomorphic pose—arms folded, bling, sunglasses, city backdrop";
+
+  if(g.includes("r&b"))
+    return "luxe, moody, studio-portrait look with glossy depth, soft reflections, and the pet posed smoothly like an R&B album model";
+
+  if(g.includes("classical"))
+    return "refined classical portrait with marble or parchment textures, elegant serif typography, and the pet posed like a timeless royal figure";
+
+  if(g.includes("jazz"))
+    return "mid-century geometric jazz-poster style with warm tones, abstract shapes, and the pet appearing like a charismatic jazz musician";
+
+  if(g.includes("children"))
+    return "playful cartoon artwork with doodles, bright stars, and the pet in a cute animated pose like a friendly storybook character";
+
+  if(g.includes("edm"))
+    return "neon futuristic scene with glowing trails, holographic effects, and the pet in an energetic pose like an EDM festival icon";
+
+  return "professional square album cover featuring the pet in a clean artistic pose appropriate for the chosen genre";
+}
+
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
+const setText = (id, t) => { $(id).textContent = t };
+const normalize = x => (x || "").trim();
+
+const joinList = a => {
+  if (!a?.length) return "";
+  if (a.length === 1) return a[0];
+  if (a.length === 2) return `${a[0]} and ${a[1]}`;
+  return `${a.slice(0,-1).join(", ")}, and ${a[a.length-1]}`;
+};
+
+const getArticle = w => /^[aeiou]/i.test((w||"").trim())?"an":"a";
+
+const getPronouns = g => {
+  g = (g || "").toLowerCase();
+  return g.startsWith("m") ? {subj:"he", poss:"his"} :
+         g.startsWith("f") ? {subj:"she", poss:"her"} :
+                             {subj:"they", poss:"their"};
+};
+
+/* ---------- Build checkbox choice UI ---------- */
+function buildChoices(containerId, options, name){
+  const c = $(containerId);
+  c.innerHTML = "";
+  options.forEach(o=>{
+    const label = document.createElement("label");
+    label.className="choice";
+    label.innerHTML = `
+      <input type="checkbox" data-name="${name}" value="${o}"> 
+      ${o[0].toUpperCase()+o.slice(1)}
+    `;
+    c.appendChild(label);
+  });
+}
+
+function getCheckedValues(name){
+  return [...document.querySelectorAll(`input[type="checkbox"][data-name="${name}"]:checked`)]
+    .map(c=>c.value);
+}
+
+function enforceLimit(name, max){
+  document.querySelectorAll(`input[type="checkbox"][data-name="${name}"]`)
+    .forEach(box=>{
+      box.addEventListener("change",()=>{
+        const values = getCheckedValues(name);
+        if(values.length > max) box.checked = false;
+      });
+    });
+}
+
+/* ---------- Tier toggle ---------- */
+function onTierChange(){
+  const tier = document.querySelector('input[name="tier"]:checked').value;
+  $("priceDisplay").textContent = tier==="song+cover"
+    ? "Current total: $29.99"
+    : "Current total: $19.99";
+
+  const enable = tier==="song+cover";
+  const album = $("albumFields");
+  album.classList.toggle("disabled", !enable);
+
+  album.querySelectorAll("input,textarea")
+       .forEach(el=>el.disabled = !enable);
+
+  if(!enable){
+    $("albumError").classList.add("hidden");
+    $("albumError").textContent="";
+  }
+}
+
+/* ---------- SONG PROMPT BUILDER ---------- */
+function buildSongPrompt(d){
+  const {subj, poss} = getPronouns(d.gender);
+  const subjCap = subj[0].toUpperCase()+subj.slice(1);
+  const noun = (d.breed || d.species || "pet");
+  const article = getArticle(noun);
+  const style = songStyleForGenre(d.genre);
+
+  let intro = `Write a ${style}`;
+  if(d.songTitle){
+    intro += ` titled "${d.songTitle}"`;
+  }
+  intro += ` about ${article} ${noun} named ${d.petName}`;
+
+  if(d.petPronounce){
+    intro += ` (pronounced ${d.petPronounce})`;
+  }
+
+  const traits = [...d.personality, ...d.descriptors].slice(0,5);
+  if(traits.length){
+    intro += ` who is ${joinList(traits)}`;
+  }
+  intro += ".";
+
+  let details = [];
+  if(d.age){
+    if(d.age.toLowerCase().includes("year")){
+      details.push(`${subj} is ${d.age} old`);
+    } else {
+      details.push(`${subj} is ${d.age} years old`);
+    }
+  }
+  if(d.phys){
+    details.push(`${subj} is ${d.phys}`);
+  }
+
+  let detailSentence = details.length ? `${subjCap} ${details.join(" and ")}.` : "";
+
+  let actsSentence = "";
+  if(d.favThings.length){
+    actsSentence = `${subjCap} loves ${joinList(d.favThings)}.`;
+  }
+
+  let specialSentence = "";
+  if(d.special){
+    let cleaned = d.special.replace(/^\s*(he|she|they)\s+/i,"");
+    if(!cleaned.endsWith(".")) cleaned += ".";
+    specialSentence = `${subjCap} ${cleaned}`;
+  }
+
+  let finalPrompt = [
+    intro, detailSentence, actsSentence, specialSentence
+  ].filter(Boolean).join(" ").replace(/\s+/g," ").trim();
+
+  if(finalPrompt.length > 500){
+    finalPrompt = finalPrompt.slice(0,497).trim()+"...";
+  }
+  return finalPrompt;
+}
+
+/* ---------- ALBUM COVER PROMPT BUILDER ---------- */
+function buildAlbumPrompt(d){
+  const noun = (d.breed || d.species || "pet");
+  const article = getArticle(noun);
+  const style = artStyleForGenre(d.genre);
+  const titleText = d.songTitle || `${d.petName}'s Track`;
+
+  let parts = [];
+  parts.push(`Create a square album cover featuring ${d.petName}, ${article} ${noun}.`);
+  if(d.phys){
+    parts.push(`Show ${d.petName} with ${d.phys}.`);
+  }
+  parts.push(`Use the uploaded photo as the primary subject to preserve likeness while allowing artistic interpretation consistent with the style.`);
+  parts.push(`Apply this art direction: ${style}.`);
+  parts.push(`Add the title text "${titleText}" using typography that matches this style.`);
+  if(d.extras){
+    parts.push(`Optional accents: ${d.extras}.`);
+  }
+  parts.push(`Export in high resolution suitable for music platforms.`);
+
+  return parts.join(" ").replace(/\s+/g," ").trim();
+}
+
+/* ---------- VALIDATION ---------- */
+function val(id){ return normalize($(id)?.value); }
+
+function validateSong(){
+  const errs=[];
+  if(!val("customerName")) errs.push("Your name is required.");
+  if(!val("customerEmail")) errs.push("Email is required.");
+  if(!val("petName")) errs.push("Pet name is required.");
+  if(!val("species")) errs.push("Species is required.");
+
+  const p = getCheckedValues("personality");
+  const d = getCheckedValues("descriptors");
+  const f = getCheckedValues("favs");
+
+  if(p.length!==3) errs.push("Pick exactly 3 personality keywords.");
+  if(d.length!==3) errs.push("Pick exactly 3 descriptive words.");
+  if(f.length<2 || f.length>3) errs.push("Pick 2–3 favorite things to do.");
+
+  return errs;
+}
+
+function validateAlbum(tier){
+  const errs=[];
+  if(tier !== "song+cover") return errs;
+
+  const photo = $("petPhoto");
+  const hasPhoto = photo && photo.files && photo.files.length > 0;
+  if(!hasPhoto) errs.push("Please upload a pet photo for the album cover.");
+
+  return errs;
+}
+
+/* ---------- MAIN SUBMISSION FLOW ---------- */
+function buildPromptsBeforeSubmit(){
+  const tier = document.querySelector('input[name="tier"]:checked').value;
+
+  $("formError").classList.add("hidden");
+  $("formError").textContent="";
+  $("formOk").classList.add("hidden");
+
+  const songErrs = validateSong();
+  if(songErrs.length){
+    $("formError").textContent = "Please fix: " + songErrs.join(" ");
+    $("formError").classList.remove("hidden");
+    return false;
+  }
+
+  const personality = getCheckedValues("personality");
+  const descriptors = getCheckedValues("descriptors");
+  const favThings = getCheckedValues("favs");
+
+  const common = {
+    customerName: val("customerName"),
+    customerEmail: val("customerEmail"),
+    petName: val("petName"),
+    petPronounce: val("petPronounce"),
+    species: $("species").value,
+    breed: val("breed"),
+    age: val("age"),
+    gender: $("gender").value,
+    phys: val("physicalDescription"),
+    personality,
+    descriptors,
+    favThings,
+    special: val("special"),
+    genre: $("genre").value,
+    songTitle: val("songTitle"),
+    extras: val("extras")
+  };
+
+  const songPrompt = buildSongPrompt(common);
+  $("hiddenSongPrompt").value = songPrompt;
+
+  if(tier==="song+cover"){
+    const albumErrs = validateAlbum(tier);
+    if(albumErrs.length){
+      $("albumError").textContent = albumErrs.join(" ");
+      $("albumError").classList.remove("hidden");
+      return false;
+    }
+    const artPrompt = buildAlbumPrompt(common);
+    $("hiddenArtPrompt").value = artPrompt;
+  } else {
+    $("hiddenArtPrompt").value = "";
+  }
+
+  // Allow normal HTML form submission to Formspree:
+  return true;
+}
+
+/* ---------- INIT ---------- */
+document.addEventListener("DOMContentLoaded", ()=>{
+  buildChoices("personalityWords", PERSONALITY_OPTIONS, "personality");
+  buildChoices("describeWords",   DESCRIBE_OPTIONS,   "descriptors");
+  buildChoices("favThings",       FAVORITE_OPTIONS,   "favs");
+
+  enforceLimit("personality",3);
+  enforceLimit("descriptors",3);
+  enforceLimit("favs",3);
+
+  document
+    .querySelectorAll('input[name="tier"]')
+    .forEach(r=> r.addEventListener("change", onTierChange));
+
+  onTierChange();
+});
+</script>
+
+</body>
+</html>
