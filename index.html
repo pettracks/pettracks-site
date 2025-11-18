@@ -248,6 +248,22 @@
   font-size:.78rem;
   font-weight:600;
 }
+/* FORCE checkbox all the way left in dropdown */
+.dropdown-menu {
+  padding-left: 0;   /* remove left padding that causes centering */
+}
+
+.dropdown-item {
+  padding-left: 0.4rem !important;   /* minimal clean left padding */
+  justify-content: flex-start !important;
+}
+
+/* keep checkbox locked to left edge */
+.dropdown-item input[type="checkbox"]{
+  margin-left: 0 !important;
+  margin-right: 6px;        /* small space between box + text */
+  flex-shrink: 0;
+}
 
   </style>
 </head>
