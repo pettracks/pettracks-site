@@ -5,9 +5,9 @@
   <title>Pet Tracks – Song & Album Cover Request</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- GLOBAL STYLES -->
+  <!-- GLOBAL + DROPDOWN STYLES -->
   <style>
-    :root {
+    :root{
       --bg:#f6f7ff;
       --card:#fff;
       --text:#202236;
@@ -16,20 +16,41 @@
       --radius:14px;
       --warn:#b23b3b;
       --ok:#1a7f37;
+
+      --pt-teal:#38C7C2;
+      --pt-purple:#8C52FF;
+      --pt-navy:#0F2A3F;
     }
 
-    * { box-sizing:border-box; }
+    *{box-sizing:border-box;}
 
-    body {
+    body{
       margin:0;
       font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
       background:var(--bg);
       color:var(--text);
     }
 
-    header { padding:1.4rem 1rem; text-align:center; }
+    header{
+      padding:1.4rem 1rem;
+      text-align:center;
+    }
 
-    .container {
+    h1{
+      margin:0 0 .25rem;
+      font-size:1.6rem;
+      font-weight:700;
+      color:var(--pt-navy);
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      font-weight:500;
+    }
+
+    .container{
       max-width:1100px;
       margin:0 auto 3rem;
       padding:0 1rem;
@@ -37,31 +58,24 @@
       gap:1.25rem;
       grid-template-columns:1.1fr .9fr;
     }
-    @media(max-width:920px) {
-      .container { grid-template-columns:1fr; }
+    @media(max-width:920px){
+      .container{grid-template-columns:1fr;}
     }
 
-    .card {
+    .card{
       background:var(--card);
       border-radius:var(--radius);
       padding:1.1rem 1.2rem 1.4rem;
       box-shadow:0 12px 30px rgba(0,0,0,.05);
     }
 
-    h1 { margin:0 0 .25rem; font-size:1.5rem; }
-    .subtitle { margin:0; color:var(--muted); }
-
-    .section-title {
-      margin:.9rem 0 .5rem;
-      font-size:.85rem;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color:var(--muted);
+    label{
+      display:block;
+      font-weight:600;
+      margin:.5rem 0 .25rem;
     }
 
-    label { display:block; font-weight:600; margin:.5rem 0 .25rem; }
-
-    input,select,textarea {
+    input,select,textarea{
       width:100%;
       padding:.5rem .6rem;
       border:1px solid #d9daf2;
@@ -70,25 +84,25 @@
       background:#fff;
     }
 
-    input[type=file] { padding:.35rem; }
-    textarea { min-height:64px; resize:vertical; }
+    input[type=file]{padding:.35rem;}
+    textarea{min-height:64px;resize:vertical;}
 
-    .two-col {
+    .two-col{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:.9rem;
     }
-    @media(max-width:560px) {
-      .two-col { grid-template-columns:1fr; }
+    @media(max-width:560px){
+      .two-col{grid-template-columns:1fr;}
     }
 
-    .tier-row {
+    .tier-row{
       display:flex;
       gap:1rem;
       flex-wrap:wrap;
     }
 
-    .tier {
+    .tier{
       background:#eef0ff;
       border:1px solid #d9daf2;
       border-radius:12px;
@@ -99,66 +113,31 @@
       cursor:pointer;
     }
 
-    .price-display { font-weight:700; margin:.4rem 0 .2rem; }
-
-    .choice-grid {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:.5rem;
-    }
-    @media(max-width:680px) {
-      .choice-grid { grid-template-columns:1fr; }
-    }
-
-    .choice {
-      background:#f8f8ff;
-      border:1px solid #e4e4ff;
-      border-radius:10px;
-      padding:.5rem .6rem;
-      display:flex;
-      align-items:center;
-      gap:.5rem;
-    }
-
-    .muted { color:var(--muted); font-size:.88rem; }
-    .small-note { color:var(--muted); font-size:.8rem; }
-    .pill {
-      background:#eef0ff;
-      padding:.15rem .5rem;
-      border-radius:999px;
-      font-size:.8rem;
-    }
-
-    .output-title {
+    .price-display{
       font-weight:700;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:.3rem;
+      margin:.4rem 0 .2rem;
     }
 
-    .output-box {
-      background:#f8f8ff;
-      border:1px solid #e4e4ff;
-      border-radius:10px;
-      padding:.75rem;
-      font-size:.9rem;
-      white-space:pre-wrap;
-      min-height:110px;
-    }
-
-    .meta {
-      font-size:.82rem;
+    .section-title{
+      margin:.9rem 0 .5rem;
+      font-size:.85rem;
+      letter-spacing:.06em;
+      text-transform:uppercase;
       color:var(--muted);
-      margin-top:.35rem;
-      display:flex;
-      gap:.75rem;
+      font-weight:700;
     }
 
-    .hidden { display:none; }
-    .disabled { opacity:.45; pointer-events:none; }
+    .muted{color:var(--muted);font-size:.88rem;}
+    .small-note{color:var(--muted);font-size:.8rem;}
 
-    button {
+    .error{color:var(--warn);font-size:.9rem;margin-top:.35rem;}
+
+    .disabled{
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    button{
       background:var(--accent);
       color:#fff;
       border:0;
@@ -169,145 +148,117 @@
       margin-top:1rem;
     }
 
-    button.secondary {
-      background:#fff;
-      color:var(--text);
-      border:1px solid #ddd;
-      border-radius:10px;
+    /* ======================================================
+       PET TRACKS CUSTOM DROPDOWNS (Branded — teal/purple)
+       ====================================================== */
+
+    .dropdown{
+      position:relative;
+      width:100%;
+      margin-bottom:1rem;
     }
 
-    .error { color:var(--warn); font-size:.9rem; margin-top:.35rem; }
-    .ok { color:var(--ok); font-size:.9rem; margin-top:.35rem; }
-/* ===============================
-   PET TRACKS CUSTOM DROPDOWNS
-   =============================== */
+    .dropdown-btn{
+      background:#ffffff;
+      border:2px solid var(--pt-teal);
+      border-radius:12px;
+      padding:0.6rem 0.75rem;
+      font-size:.95rem;
+      font-weight:600;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      color:var(--pt-navy);
+      transition:.2s;
+      box-shadow:0 0 8px rgba(140,82,255,0.2);
+    }
 
-/* --- Dropdown wrapper --- */
-.dropdown {
-  position: relative;
-  width: 100%;
-  margin-bottom: 1rem;
-}
+    .dropdown-btn:hover{
+      border-color:var(--pt-purple);
+      box-shadow:0 0 12px rgba(140,82,255,0.35);
+    }
 
-/* --- Dropdown button / pill --- */
-.dropdown-btn {
-  background: #ffffff;
-  border: 2px solid #38C7C2; /* Pet Tracks teal */
-  border-radius: 12px;
-  padding: 0.6rem 0.75rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #0F2A3F; /* Deep ocean blue for text */
-  transition: all 0.2s ease;
-  box-shadow: 0 0 8px rgba(140, 82, 255, 0.2); /* subtle purple glow */
-}
+    .dropdown-arrow{
+      font-size:1.1rem;
+      transition:.25s;
+    }
 
-.dropdown-btn:hover {
-  border-color: #8C52FF; /* accent purple */
-  box-shadow: 0 0 12px rgba(140, 82, 255, 0.35);
-}
+    .dropdown.open .dropdown-arrow{
+      transform:rotate(180deg);
+    }
 
-.dropdown-btn span {
-  color: #6f7291; /* muted */
-  font-weight: 500;
-  font-size: 0.85rem;
-}
+    .dropdown-menu{
+      background:#ffffff;
+      border:2px solid var(--pt-teal);
+      border-radius:12px;
+      margin-top:0.4rem;
+      padding:0.75rem;
+      max-height:260px;
+      overflow-y:auto;
+      position:absolute;
+      width:100%;
+      z-index:50;
+      display:none;
+      box-shadow:0 10px 18px rgba(0,0,0,0.08);
+    }
 
-/* --- Arrow icon --- */
-.dropdown-arrow {
-  font-size: 1.1rem;
-  transition: 0.25s;
-}
+    .dropdown.open .dropdown-menu{
+      display:block;
+    }
 
-.dropdown.open .dropdown-arrow {
-  transform: rotate(180deg);
-}
+    .dropdown-item{
+      display:flex;
+      align-items:center;
+      padding:0.35rem 0.25rem;
+      cursor:pointer;
+      border-radius:8px;
+      transition:background .2s;
+    }
 
-/* --- Dropdown menu container --- */
-.dropdown-menu {
-  background: #ffffff;
-  border: 2px solid #38C7C2;
-  border-radius: 12px;
-  margin-top: 0.4rem;
-  padding: 0.75rem;
-  max-height: 260px;
-  overflow-y: auto;
-  position: absolute;
-  width: 100%;
-  z-index: 50;
-  display: none;
-  box-shadow: 0 10px 18px rgba(0,0,0,0.08);
-}
+    .dropdown-item:hover{
+      background:rgba(56,199,194,0.12);
+    }
 
-/* Open state */
-.dropdown.open .dropdown-menu {
-  display: block;
-}
+    .dropdown-item input{
+      margin-right:8px;
+    }
 
-/* --- Menu item styling --- */
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 0.35rem 0.25rem;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
+    .selected-container{
+      margin-top:0.4rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.3rem;
+    }
 
-.dropdown-item:hover {
-  background: rgba(56,199,194,0.12); /* light teal tint */
-}
-
-.dropdown-item input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-/* --- Selected pill preview --- */
-.selected-pill {
-  display: inline-block;
-  background: #38C7C2;
-  color: white;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  margin-right: 0.3rem;
-  margin-top: 0.2rem;
-}
-
-/* Pills container */
-.selected-container {
-  margin-top: 0.4rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-  
-</style>
+    .selected-pill{
+      background:var(--pt-teal);
+      color:white;
+      padding:0.25rem 0.55rem;
+      border-radius:999px;
+      font-size:.78rem;
+      font-weight:600;
+    }
+  </style>
 </head>
 
 <body>
 <header>
   <h1>Pet Tracks – Song & Album Cover Request</h1>
-  <p class="subtitle">Quick selections → polished AI prompts for music & art.</p>
+  <p class="subtitle">Turn your pet’s personality into a custom track 🎵🐾</p>
 </header>
-
 <main class="container">
   <!-- LEFT: FORM -->
   <section class="card">
-
-    <!-- ⭐ IMPORTANT: FORMSPREE INTEGRATION -->
     <form id="pettracksForm"
           action="https://formspree.io/f/xkgyonnr"
           method="POST"
           enctype="multipart/form-data"
           onsubmit="return buildPromptsBeforeSubmit()">
 
-      <!-- CUSTOMER INFO -->
+      <!-- CUSTOMER -->
       <div class="section-title">Customer</div>
+
       <label>Your name *</label>
       <input id="customerName" name="Customer Name"
              required placeholder="e.g., John Doe" />
@@ -315,8 +266,10 @@
       <label>Email *</label>
       <input id="customerEmail" name="email" type="email"
              required placeholder="you@example.com" />
-      <!-- PACKAGE SELECTION -->
+
+      <!-- PACKAGE -->
       <div class="section-title">Choose your package</div>
+
       <div class="price-display" id="priceDisplay">Current total: $19.99</div>
 
       <div class="tier-row">
@@ -337,10 +290,10 @@
       <div class="section-title">About your pet</div>
 
       <label>Pet name *</label>
-      <input id="petName" name="Pet Name" required placeholder="e.g., Buddy" />
+      <input id="petName" name="Pet Name" required placeholder="e.g., Cooper" />
 
       <label>Phonetic pronunciation (optional)</label>
-      <input id="petPronounce" name="Phonetic" placeholder="e.g., BUD-ee" />
+      <input id="petPronounce" name="Phonetic" placeholder="e.g., KOO-per" />
 
       <div class="two-col">
         <div>
@@ -354,14 +307,14 @@
 
         <div>
           <label>Breed</label>
-          <input id="breed" name="Breed" placeholder="e.g., Golden Retriever" />
+          <input id="breed" name="Breed" placeholder="e.g., Australian Shepherd" />
         </div>
       </div>
 
       <div class="two-col">
         <div>
           <label>Age (optional)</label>
-          <input id="age" name="Age" placeholder="e.g., 4 years" />
+          <input id="age" name="Age" placeholder="e.g., 8 years" />
         </div>
 
         <div>
@@ -377,68 +330,54 @@
       <label>Physical Description (fur color, size, markings)</label>
       <input id="physicalDescription"
              name="Physical Description"
-             placeholder="e.g., golden yellow coat, medium size" />
+             placeholder="e.g., brown/red fur with white chest and paws" />
 
-      <!-- PERSONALITY + DESCRIPTORS -->
-     <!-- PERSONALITY KEYWORDS -->
-<div class="section-title">Personality Keywords <span class="muted">(Pick 3)</span></div>
+      <!-- PERSONALITY DROPDOWN -->
+      <div class="section-title">Personality Keywords <span class="muted">(Pick 3)</span></div>
 
-<div class="dropdown" data-limit="3" id="dropdown-personality">
-  <div class="dropdown-btn">
-    <div class="dropdown-label">Select 3 personality keywords</div>
-    <div class="dropdown-arrow">⌄</div>
-  </div>
+      <div class="dropdown" data-limit="3" id="dropdown-personality">
+        <div class="dropdown-btn">
+          <div class="dropdown-label">Select 3 personality keywords</div>
+          <div class="dropdown-arrow">⌄</div>
+        </div>
+        <div class="selected-container" id="selected-personality"></div>
+        <div class="dropdown-menu" id="menu-personality"></div>
+      </div>
 
-  <div class="selected-container" id="selected-personality"></div>
+      <!-- DESCRIPTIVE WORDS -->
+      <div class="section-title" style="margin-top:.7rem;">
+        What Words Best Describe Your Pet? <span class="muted">(Pick 3)</span>
+      </div>
 
-  <div class="dropdown-menu" id="menu-personality">
-    <!-- JS will populate items here -->
-  </div>
-</div>
+      <div class="dropdown" data-limit="3" id="dropdown-descriptors">
+        <div class="dropdown-btn">
+          <div class="dropdown-label">Select 3 descriptive words</div>
+          <div class="dropdown-arrow">⌄</div>
+        </div>
+        <div class="selected-container" id="selected-descriptors"></div>
+        <div class="dropdown-menu" id="menu-descriptors"></div>
+      </div>
 
+      <!-- FAVORITE ACTIVITIES -->
+      <div class="section-title" style="margin-top:.7rem;">
+        Favorite Things to Do <span class="muted">(Pick 2–3)</span>
+      </div>
 
-<!-- DESCRIPTIVE WORDS -->
-<div class="section-title" style="margin-top:.7rem;">
-  What Words Best Describe Your Pet? <span class="muted">(Pick 3)</span>
-</div>
+      <div class="dropdown" data-min="2" data-limit="3" id="dropdown-favs">
+        <div class="dropdown-btn">
+          <div class="dropdown-label">Pick 2–3 favorite activities</div>
+          <div class="dropdown-arrow">⌄</div>
+        </div>
+        <div class="selected-container" id="selected-favs"></div>
+        <div class="dropdown-menu" id="menu-favs"></div>
+      </div>
 
-<div class="dropdown" data-limit="3" id="dropdown-descriptors">
-  <div class="dropdown-btn">
-    <div class="dropdown-label">Select 3 descriptive words</div>
-    <div class="dropdown-arrow">⌄</div>
-  </div>
-
-  <div class="selected-container" id="selected-descriptors"></div>
-
-  <div class="dropdown-menu" id="menu-descriptors">
-    <!-- JS will populate items here -->
-  </div>
-</div>
-
-
-<!-- FAVORITE THINGS TO DO -->
-<div class="section-title" style="margin-top:.7rem;">
-  Favorite Things to Do <span class="muted">(Pick 2–3)</span>
-</div>
-
-<div class="dropdown" data-min="2" data-limit="3" id="dropdown-favs">
-  <div class="dropdown-btn">
-    <div class="dropdown-label">Pick 2–3 favorite activities</div>
-    <div class="dropdown-arrow">⌄</div>
-  </div>
-
-  <div class="selected-container" id="selected-favs"></div>
-
-  <div class="dropdown-menu" id="menu-favs">
-    <!-- JS will populate items here -->
-  </div>
-</div>
-
+      <!-- SPECIAL -->
       <label style="margin-top:.6rem;">
         Something Special or Unique About Your Pet (1–2 sentences) (Optional)
       </label>
       <textarea id="special" name="Something Special" maxlength="240"
-                placeholder='e.g., We call him Bubba Wubba and he does happy zoomies when excited.'></textarea>
+        placeholder='e.g., We call him Bubba Wubba and he does happy zoomies when excited.'></textarea>
 
       <!-- SONG PREFS -->
       <div class="section-title">Song Preferences</div>
@@ -463,17 +402,16 @@
         <div>
           <label>Song Title (Optional)</label>
           <input id="songTitle" name="Song Title"
-                 placeholder='e.g., "Buddy the Bandit"' />
+                 placeholder='e.g., "Cooper Trooper"' />
         </div>
       </div>
 
-      <!-- ALBUM COVER (TIER-BASED) -->
-      <div class="section-title">Album Cover (Paw Deluxe)</div>
-      <div id="albumFields" class="disabled">
+      <!-- ALBUM COVER -->
+      <div class="section-title">Album cover (Paw Deluxe)</div>
 
+      <div id="albumFields" class="disabled">
         <label>Upload pet photo *</label>
         <input type="file" id="petPhoto" name="Pet Photo" accept="image/*" />
-
         <span class="small-note">Required for Paw Deluxe to preserve likeness.</span>
 
         <label style="margin-top:.6rem;">Extra Elements (Optional)</label>
@@ -483,195 +421,25 @@
         <div id="albumError" class="error hidden"></div>
       </div>
 
-      <!-- ⭐ HIDDEN FIELDS FOR PROMPTS (BUILT BY JS BEFORE SUBMIT) -->
+      <!-- HIDDEN PROMPTS FOR STAFF -->
       <input type="hidden" id="hiddenSongPrompt" name="Song Prompt" />
       <input type="hidden" id="hiddenArtPrompt" name="Album Cover Prompt" />
 
-      <!-- ⭐ REDIRECT FOR FORMSPREE -->
+      <!-- REDIRECT -->
       <input type="hidden" name="_redirect"
-             value="https://pettracks.github.io/pettracks-site/thankyou.html" />
+        value="https://pettracks.github.io/pettracks-site/thankyou.html" />
 
-      <!-- FORM ERRORS -->
+      <!-- ERROR -->
       <div id="formError" class="error hidden"></div>
-      <div id="formOk" class="ok hidden"></div>
 
       <button type="submit" id="generateBtn">Submit Order</button>
     </form>
   </section>
-
-  <!-- RIGHT PANEL REMOVED -->
 </main>
-<!-- ⭐ JAVASCRIPT SECTION -->
 <script>
-/* ---------- Option sets (duplicate-free) ---------- */
 /* ============================================================
-   PET TRACKS CUSTOM DROPDOWN ENGINE
-   Replaces old checkbox grid logic
+   OPTION SETS
    ============================================================ */
-
-/* Build dropdown menu items dynamically */
-function buildDropdownItems(menuId, valuesArray, nameKey) {
-  const menu = document.getElementById(menuId);
-  menu.innerHTML = "";
-
-  valuesArray.forEach(val => {
-    const item = document.createElement("div");
-    item.className = "dropdown-item";
-
-    item.innerHTML = `
-      <input type="checkbox" value="${val}" data-group="${nameKey}">
-      <span>${val[0].toUpperCase() + val.slice(1)}</span>
-    `;
-
-    menu.appendChild(item);
-  });
-}
-
-/* Helper to get selected values */
-function getDropdownSelected(groupName) {
-  return [
-    ...document.querySelectorAll(`input[data-group="${groupName}"]:checked`)
-  ].map(i => i.value);
-}
-
-/* Render selected item “pills” */
-function updateSelectedPills(containerId, values) {
-  const box = document.getElementById(containerId);
-  box.innerHTML = "";
-  values.forEach(v => {
-    const pill = document.createElement("div");
-    pill.className = "selected-pill";
-    pill.textContent = v;
-    box.appendChild(pill);
-  });
-}
-
-/* Enforce max/min selection limits */
-function enforceDropdownLimits(dropdown, groupName) {
-  const max = Number(dropdown.dataset.limit || 99);
-  const min = Number(dropdown.dataset.min || 0);
-
-  const checkboxes = dropdown.querySelectorAll(`input[data-group="${groupName}"]`);
-
-  checkboxes.forEach(box => {
-    box.addEventListener("change", () => {
-      const selected = getDropdownSelected(groupName);
-
-      // enforce max
-      if (selected.length > max) {
-        box.checked = false;
-        return;
-      }
-
-      // update pills
-      const pillContainer = dropdown.querySelector(".selected-container");
-      updateSelectedPills(pillContainer.id, selected);
-    });
-  });
-}
-
-/* Toggle dropdown open/close */
-function attachDropdownToggle(dropdownId) {
-  const dropdown = document.getElementById(dropdownId);
-  const btn = dropdown.querySelector(".dropdown-btn");
-
-  btn.addEventListener("click", () => {
-    dropdown.classList.toggle("open");
-  });
-
-  // Close if clicking outside
-  document.addEventListener("click", (e) => {
-    if (!dropdown.contains(e.target)) dropdown.classList.remove("open");
-  });
-}
-
-/* ============================================================
-   INITIALIZATION FOR ALL THREE DROPDOWNS
-   ============================================================ */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* PERSONALITY dropdown */
-  buildDropdownItems(
-    "menu-personality",
-    PERSONALITY_OPTIONS,
-    "personality"
-  );
-  enforceDropdownLimits(
-    document.getElementById("dropdown-personality"),
-    "personality"
-  );
-  attachDropdownToggle("dropdown-personality");
-
-
-  /* DESCRIPTORS dropdown */
-  buildDropdownItems(
-    "menu-descriptors",
-    DESCRIBE_OPTIONS,
-    "descriptors"
-  );
-  enforceDropdownLimits(
-    document.getElementById("dropdown-descriptors"),
-    "descriptors"
-  );
-  attachDropdownToggle("dropdown-descriptors");
-
-
-  /* FAVORITE THINGS dropdown (min 2, max 3) */
-  buildDropdownItems(
-    "menu-favs",
-    FAVORITE_OPTIONS,
-    "favs"
-  );
-  enforceDropdownLimits(
-    document.getElementById("dropdown-favs"),
-    "favs"
-  );
-  attachDropdownToggle("dropdown-favs");
-});
-
-/* ============================================================
-   HOOK INTO YOUR EXISTING PROMPT VALIDATION SYSTEM
-   ============================================================ */
-
-function validateSong() {
-  const errs = [];
-
-  if (!val("customerName")) errs.push("Your name is required.");
-  if (!val("customerEmail")) errs.push("Email is required.");
-  if (!val("petName")) errs.push("Pet name is required.");
-  if (!val("species")) errs.push("Species is required.");
-
-  // New dropdown selections:
-  const personality = getDropdownSelected("personality");
-  const descriptors = getDropdownSelected("descriptors");
-  const favs = getDropdownSelected("favs");
-
-  if (personality.length !== 3)
-    errs.push("Pick exactly 3 personality keywords.");
-
-  if (descriptors.length !== 3)
-    errs.push("Pick exactly 3 descriptive words.");
-
-  if (favs.length < 2 || favs.length > 3)
-    errs.push("Pick 2–3 favorite things to do.");
-
-  return errs;
-}
-
-/* Override these to read new dropdown data */
-function getSelectedPersonality() {
-  return getDropdownSelected("personality");
-}
-function getSelectedDescriptors() {
-  return getDropdownSelected("descriptors");
-}
-function getSelectedFavorites() {
-  return getDropdownSelected("favs");
-}
-
-/* Plug into your prompt builder (inside buildPromptsBeforeSubmit) */
-
 const PERSONALITY_OPTIONS = [
   "full of attitude","gentle","energetic","calm","loyal","smart","mischievous",
   "protective","confident","shy","brave","affectionate","independent","social","patient","curious"
@@ -688,7 +456,9 @@ const FAVORITE_OPTIONS = [
   "playing tug-of-war","learning tricks"
 ];
 
-/* ---------- Genre style cues ---------- */
+/* ============================================================
+   GENRE STYLE MAPPERS
+   ============================================================ */
 function songStyleForGenre(g){
   g=(g||"").toLowerCase();
   if(g.includes("happy pop")) return "bright, upbeat pop song";
@@ -711,111 +481,159 @@ function artStyleForGenre(g){
     return "vibrant pop-art cover with colorful gradients, glossy lighting, and the pet posing playfully like a cheerful pop icon";
 
   if(g.includes("country"))
-    return "rustic countryside poster style with warm sunlight, soft grain, and the pet posed proudly like a country star in a scenic outdoor setting";
+    return "rustic countryside poster style with warm sunlight, soft grain, and the pet posed proudly like a country star outdoors";
 
   if(g.includes("rock"))
-    return "bold stage-light design with gritty shadows, dramatic contrast, and the pet in an energetic rock-star pose—like holding a guitar or standing center-stage";
+    return "bold stage-light design with gritty shadows, dramatic contrast, and the pet in an energetic rock-star pose";
 
   if(g.includes("acoustic"))
-    return "earthy, minimalist hand-drawn aesthetic with soft pastels and the pet sitting calmly beside an acoustic guitar or in a warm folk-inspired scene";
+    return "earthy minimalist hand-drawn scene with soft pastels and the pet sitting calmly beside an acoustic guitar";
 
   if(g.includes("hip-hop"))
-    return "urban street-art aesthetic with graffiti textures and the pet standing upright in a confident anthropomorphic pose—arms folded, bling, sunglasses, city backdrop";
+    return "urban street-art aesthetic with graffiti textures and the pet upright in a confident anthropomorphic pose wearing bling";
 
   if(g.includes("r&b"))
-    return "luxe, moody, studio-portrait look with glossy depth, soft reflections, and the pet posed smoothly like an R&B album model";
+    return "moody, luxe studio-portrait style with glossy depth and smooth R&B-inspired lighting";
 
   if(g.includes("classical"))
-    return "refined classical portrait with marble or parchment textures, elegant serif typography, and the pet posed like a timeless royal figure";
+    return "refined classical portrait with marble or parchment textures and elegant serif-style composition";
 
   if(g.includes("jazz"))
-    return "mid-century geometric jazz-poster style with warm tones, abstract shapes, and the pet appearing like a charismatic jazz musician";
+    return "mid-century geometric jazz-poster style with warm tones and abstract shapes";
 
   if(g.includes("children"))
-    return "playful cartoon artwork with doodles, bright stars, and the pet in a cute animated pose like a friendly storybook character";
+    return "playful cartoon artwork with doodles, bright stars, and the pet in a cute animated pose";
 
   if(g.includes("edm"))
-    return "neon futuristic scene with glowing trails, holographic effects, and the pet in an energetic pose like an EDM festival icon";
+    return "neon futuristic scene with glowing trails, holographic accents, and the pet in an energetic EDM-festival pose";
 
-  return "professional square album cover featuring the pet in a clean artistic pose appropriate for the chosen genre";
+  return "clean, high-quality square album cover featuring the pet";
 }
 
-/* ---------- Helpers ---------- */
+/* ============================================================
+   HELPERS
+   ============================================================ */
 const $ = id => document.getElementById(id);
-const setText = (id, t) => { $(id).textContent = t };
-const normalize = x => (x || "").trim();
-
-const joinList = a => {
-  if (!a?.length) return "";
-  if (a.length === 1) return a[0];
-  if (a.length === 2) return `${a[0]} and ${a[1]}`;
-  return `${a.slice(0,-1).join(", ")}, and ${a[a.length-1]}`;
-};
-
-const getArticle = w => /^[aeiou]/i.test((w||"").trim())?"an":"a";
-
+const normalize = x => (x||"").trim();
+const joinList = arr => (
+  arr.length === 1 ? arr[0] :
+  arr.length === 2 ? arr.join(" and ") :
+  arr.slice(0,-1).join(", ") + ", and " + arr[arr.length-1]
+);
+const getArticle = w => /^[aeiou]/i.test(w||"") ? "an" : "a";
 const getPronouns = g => {
-  g = (g || "").toLowerCase();
+  g = (g||"").toLowerCase();
   return g.startsWith("m") ? {subj:"he", poss:"his"} :
          g.startsWith("f") ? {subj:"she", poss:"her"} :
                              {subj:"they", poss:"their"};
 };
 
-/* ---------- Build checkbox choice UI ---------- */
-function buildChoices(containerId, options, name){
-  const c = $(containerId);
-  c.innerHTML = "";
-  options.forEach(o=>{
-    const label = document.createElement("label");
-    label.className="choice";
-    label.innerHTML = `
-      <input type="checkbox" data-name="${name}" value="${o}"> 
-      ${o[0].toUpperCase()+o.slice(1)}
+/* ============================================================
+   PET TRACKS DROPDOWN SYSTEM
+   ============================================================ */
+function buildDropdownItems(menuId, valuesArray, groupName){
+  const menu = $(menuId);
+  menu.innerHTML = "";
+  valuesArray.forEach(val => {
+    const item = document.createElement("div");
+    item.className = "dropdown-item";
+    item.innerHTML = `
+      <input type="checkbox" value="${val}" data-group="${groupName}">
+      <span>${val[0].toUpperCase() + val.slice(1)}</span>
     `;
-    c.appendChild(label);
+    menu.appendChild(item);
   });
 }
 
-function getCheckedValues(name){
-  return [...document.querySelectorAll(`input[type="checkbox"][data-name="${name}"]:checked`)]
-    .map(c=>c.value);
+function getDropdownSelected(groupName){
+  return [...document.querySelectorAll(`input[data-group="${groupName}"]:checked`)]
+    .map(i => i.value);
 }
 
-function enforceLimit(name, max){
-  document.querySelectorAll(`input[type="checkbox"][data-name="${name}"]`)
-    .forEach(box=>{
-      box.addEventListener("change",()=>{
-        const values = getCheckedValues(name);
-        if(values.length > max) box.checked = false;
+function updateSelectedPills(containerId, values){
+  const box = $(containerId);
+  box.innerHTML = "";
+  values.forEach(v => {
+    const pill = document.createElement("div");
+    pill.className = "selected-pill";
+    pill.textContent = v;
+    box.appendChild(pill);
+  });
+}
+
+function enforceDropdownLimits(dropdown, groupName){
+  const max = Number(dropdown.dataset.limit || 99);
+
+  dropdown.querySelectorAll(`input[data-group="${groupName}"]`)
+    .forEach(box => {
+      box.addEventListener("change", ()=>{
+        const sel = getDropdownSelected(groupName);
+        if(sel.length > max){
+          box.checked = false;
+          return;
+        }
+        updateSelectedPills(
+          dropdown.querySelector(".selected-container").id,
+          sel
+        );
       });
     });
 }
 
-/* ---------- Tier toggle ---------- */
-function onTierChange(){
-  const tier = document.querySelector('input[name="tier"]:checked').value;
-  $("priceDisplay").textContent = tier==="song+cover"
-    ? "Current total: $29.99"
-    : "Current total: $19.99";
-
-  const enable = tier==="song+cover";
-  const album = $("albumFields");
-  album.classList.toggle("disabled", !enable);
-
-  album.querySelectorAll("input,textarea")
-       .forEach(el=>el.disabled = !enable);
-
-  if(!enable){
-    $("albumError").classList.add("hidden");
-    $("albumError").textContent="";
-  }
+function attachDropdownToggle(dropdownId){
+  const dropdown = $(dropdownId);
+  const btn = dropdown.querySelector(".dropdown-btn");
+  btn.addEventListener("click", ()=>{
+    dropdown.classList.toggle("open");
+  });
+  document.addEventListener("click", e=>{
+    if(!dropdown.contains(e.target)) dropdown.classList.remove("open");
+  });
 }
 
-/* ---------- SONG PROMPT BUILDER ---------- */
+/* ============================================================
+   VALIDATION
+   ============================================================ */
+function val(id){ return normalize($(id)?.value); }
+
+function validateSong(){
+  const errs=[];
+  if(!val("customerName")) errs.push("Your name is required.");
+  if(!val("customerEmail")) errs.push("Email is required.");
+  if(!val("petName")) errs.push("Pet name is required.");
+
+  const personality = getDropdownSelected("personality");
+  const descriptors = getDropdownSelected("descriptors");
+  const favs = getDropdownSelected("favs");
+
+  if(personality.length !== 3)
+    errs.push("Pick exactly 3 personality keywords.");
+
+  if(descriptors.length !== 3)
+    errs.push("Pick exactly 3 descriptive words.");
+
+  if(favs.length < 2 || favs.length > 3)
+    errs.push("Pick 2–3 favorite things to do.");
+
+  return errs;
+}
+
+function validateAlbum(tier){
+  const errs=[];
+  if(tier !== "song+cover") return errs;
+  const photo = $("petPhoto");
+  if(!photo || !photo.files || !photo.files.length)
+    errs.push("Please upload a pet photo for Paw Deluxe.");
+  return errs;
+}
+
+/* ============================================================
+   SONG PROMPT BUILDER
+   ============================================================ */
 function buildSongPrompt(d){
   const {subj, poss} = getPronouns(d.gender);
-  const subjCap = subj[0].toUpperCase()+subj.slice(1);
-  const noun = (d.breed || d.species || "pet");
+  const subjCap = subj.charAt(0).toUpperCase() + subj.slice(1);
+  const noun = d.breed || d.species || "pet";
   const article = getArticle(noun);
   const style = songStyleForGenre(d.genre);
 
@@ -824,115 +642,80 @@ function buildSongPrompt(d){
     intro += ` titled "${d.songTitle}"`;
   }
   intro += ` about ${article} ${noun} named ${d.petName}`;
-
   if(d.petPronounce){
     intro += ` (pronounced ${d.petPronounce})`;
   }
 
   const traits = [...d.personality, ...d.descriptors].slice(0,5);
   if(traits.length){
-    intro += ` who is ${joinList(traits)}`;
+    intro += ` who is ${joinList(traits)}.`;
+  } else {
+    intro += `.`;
   }
-  intro += ".";
 
   let details = [];
   if(d.age){
-    if(d.age.toLowerCase().includes("year")){
+    if(d.age.toLowerCase().includes("year"))
       details.push(`${subj} is ${d.age} old`);
-    } else {
+    else
       details.push(`${subj} is ${d.age} years old`);
-    }
   }
   if(d.phys){
     details.push(`${subj} is ${d.phys}`);
   }
 
   let detailSentence = details.length ? `${subjCap} ${details.join(" and ")}.` : "";
-
-  let actsSentence = "";
-  if(d.favThings.length){
-    actsSentence = `${subjCap} loves ${joinList(d.favThings)}.`;
-  }
+  let actsSentence = d.favThings.length ? `${subjCap} loves ${joinList(d.favThings)}.` : "";
 
   let specialSentence = "";
   if(d.special){
-    let cleaned = d.special.replace(/^\s*(he|she|they)\s+/i,"");
-    if(!cleaned.endsWith(".")) cleaned += ".";
-    specialSentence = `${subjCap} ${cleaned}`;
+    let clean = d.special.replace(/^\s*(he|she|they)\s+/i,"");
+    if(!clean.endsWith(".")) clean += ".";
+    specialSentence = `${subjCap} ${clean}`;
   }
 
-  let finalPrompt = [
-    intro, detailSentence, actsSentence, specialSentence
-  ].filter(Boolean).join(" ").replace(/\s+/g," ").trim();
+  let final = [intro, detailSentence, actsSentence, specialSentence]
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g," ")
+    .trim();
 
-  if(finalPrompt.length > 500){
-    finalPrompt = finalPrompt.slice(0,497).trim()+"...";
-  }
-  return finalPrompt;
+  if(final.length > 500)
+    final = final.slice(0,497).trim() + "...";
+
+  return final;
 }
 
-/* ---------- ALBUM COVER PROMPT BUILDER ---------- */
+/* ============================================================
+   ALBUM COVER PROMPT BUILDER
+   ============================================================ */
 function buildAlbumPrompt(d){
-  const noun = (d.breed || d.species || "pet");
+  const noun = d.breed || d.species || "pet";
   const article = getArticle(noun);
   const style = artStyleForGenre(d.genre);
   const titleText = d.songTitle || `${d.petName}'s Track`;
 
-  let parts = [];
-  parts.push(`Create a square album cover featuring ${d.petName}, ${article} ${noun}.`);
-  if(d.phys){
-    parts.push(`Show ${d.petName} with ${d.phys}.`);
-  }
-  parts.push(`Use the uploaded photo as the primary subject to preserve likeness while allowing artistic interpretation consistent with the style.`);
-  parts.push(`Apply this art direction: ${style}.`);
-  parts.push(`Add the title text "${titleText}" using typography that matches this style.`);
-  if(d.extras){
-    parts.push(`Optional accents: ${d.extras}.`);
-  }
-  parts.push(`Export in high resolution suitable for music platforms.`);
+  const lines = [
+    `Create a square album cover featuring ${d.petName}, ${article} ${noun}.`,
+    d.phys ? `Show ${d.petName} with ${d.phys}.` : "",
+    `Use the uploaded photo as the primary subject to preserve likeness while allowing artistic interpretation consistent with the style.`,
+    `Apply this art direction: ${style}.`,
+    `Add the title text "${titleText}" using typography that matches this style.`,
+    d.extras ? `Optional accents: ${d.extras}.` : "",
+    `Export in high resolution suitable for music platforms.`
+  ];
 
-  return parts.join(" ").replace(/\s+/g," ").trim();
+  return lines.filter(Boolean).join(" ").trim();
 }
 
-/* ---------- VALIDATION ---------- */
-function val(id){ return normalize($(id)?.value); }
-
-function validateSong(){
-  const errs=[];
-  if(!val("customerName")) errs.push("Your name is required.");
-  if(!val("customerEmail")) errs.push("Email is required.");
-  if(!val("petName")) errs.push("Pet name is required.");
-  if(!val("species")) errs.push("Species is required.");
-
- const personality = getSelectedPersonality();
-const descriptors = getSelectedDescriptors();
-const favThings = getSelectedFavorites();
-
-  if(p.length!==3) errs.push("Pick exactly 3 personality keywords.");
-  if(d.length!==3) errs.push("Pick exactly 3 descriptive words.");
-  if(f.length<2 || f.length>3) errs.push("Pick 2–3 favorite things to do.");
-
-  return errs;
-}
-
-function validateAlbum(tier){
-  const errs=[];
-  if(tier !== "song+cover") return errs;
-
-  const photo = $("petPhoto");
-  const hasPhoto = photo && photo.files && photo.files.length > 0;
-  if(!hasPhoto) errs.push("Please upload a pet photo for the album cover.");
-
-  return errs;
-}
-
-/* ---------- MAIN SUBMISSION FLOW ---------- */
+/* ============================================================
+   MAIN SUBMIT HANDLER
+   ============================================================ */
 function buildPromptsBeforeSubmit(){
-  const tier = document.querySelector('input[name="tier"]:checked').value;
-
   $("formError").classList.add("hidden");
   $("formError").textContent="";
-  $("formOk").classList.add("hidden");
+
+  const tier = document.querySelector('input[name="tier"]:checked').value;
 
   const songErrs = validateSong();
   if(songErrs.length){
@@ -941,9 +724,14 @@ function buildPromptsBeforeSubmit(){
     return false;
   }
 
-  const personality = getCheckedValues("personality");
-  const descriptors = getCheckedValues("descriptors");
-  const favThings = getCheckedValues("favs");
+  const albumErrs = validateAlbum(tier);
+  if(albumErrs.length){
+    $("albumError").textContent = albumErrs.join(" ");
+    $("albumError").classList.remove("hidden");
+    return false;
+  } else {
+    $("albumError").classList.add("hidden");
+  }
 
   const common = {
     customerName: val("customerName"),
@@ -955,9 +743,9 @@ function buildPromptsBeforeSubmit(){
     age: val("age"),
     gender: $("gender").value,
     phys: val("physicalDescription"),
-    personality,
-    descriptors,
-    favThings,
+    personality: getDropdownSelected("personality"),
+    descriptors: getDropdownSelected("descriptors"),
+    favThings: getDropdownSelected("favs"),
     special: val("special"),
     genre: $("genre").value,
     songTitle: val("songTitle"),
@@ -967,38 +755,50 @@ function buildPromptsBeforeSubmit(){
   const songPrompt = buildSongPrompt(common);
   $("hiddenSongPrompt").value = songPrompt;
 
-  if(tier==="song+cover"){
-    const albumErrs = validateAlbum(tier);
-    if(albumErrs.length){
-      $("albumError").textContent = albumErrs.join(" ");
-      $("albumError").classList.remove("hidden");
-      return false;
-    }
-    const artPrompt = buildAlbumPrompt(common);
-    $("hiddenArtPrompt").value = artPrompt;
+  if(tier === "song+cover"){
+    $("hiddenArtPrompt").value = buildAlbumPrompt(common);
   } else {
     $("hiddenArtPrompt").value = "";
   }
 
-  // Allow normal HTML form submission to Formspree:
-  return true;
+  return true; // allow Formspree submission
 }
 
-/* ---------- INIT ---------- */
+/* ============================================================
+   INIT
+   ============================================================ */
 document.addEventListener("DOMContentLoaded", ()=>{
-  buildChoices("personalityWords", PERSONALITY_OPTIONS, "personality");
-  buildChoices("describeWords",   DESCRIBE_OPTIONS,   "descriptors");
-  buildChoices("favThings",       FAVORITE_OPTIONS,   "favs");
 
-  enforceLimit("personality",3);
-  enforceLimit("descriptors",3);
-  enforceLimit("favs",3);
+  // Build dropdown items
+  buildDropdownItems("menu-personality", PERSONALITY_OPTIONS, "personality");
+  buildDropdownItems("menu-descriptors", DESCRIBE_OPTIONS, "descriptors");
+  buildDropdownItems("menu-favs", FAVORITE_OPTIONS, "favs");
 
-  document
-    .querySelectorAll('input[name="tier"]')
-    .forEach(r=> r.addEventListener("change", onTierChange));
+  // Controls
+  enforceDropdownLimits($("dropdown-personality"), "personality");
+  enforceDropdownLimits($("dropdown-descriptors"), "descriptors");
+  enforceDropdownLimits($("dropdown-favs"), "favs");
 
-  onTierChange();
+  // Toggles
+  attachDropdownToggle("dropdown-personality");
+  attachDropdownToggle("dropdown-descriptors");
+  attachDropdownToggle("dropdown-favs");
+
+  // Tier toggle
+  document.querySelectorAll('input[name="tier"]').forEach(r=>{
+    r.addEventListener("change", ()=>{
+      const enable = r.value === "song+cover";
+      const af = $("albumFields");
+      af.classList.toggle("disabled", !enable);
+      af.querySelectorAll("input,textarea").forEach(el=> el.disabled = !enable);
+      $("albumError").classList.add("hidden");
+      $("albumError").textContent="";
+      $("priceDisplay").textContent = enable
+        ? "Current total: $29.99"
+        : "Current total: $19.99";
+    });
+  });
+
 });
 </script>
 
