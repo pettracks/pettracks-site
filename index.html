@@ -207,63 +207,43 @@
       display:block;
     }
 
-    .dropdown-item{
-  display:flex;
-  align-items:center;
-  gap:0.4rem;
-  padding:0.35rem 0.25rem;
-  cursor:pointer;
-  border-radius:8px;
-  transition:background .2s;
+ /* PERFECTLY ALIGNED DROPDOWN ITEMS — CLEAN VERSION */
+.dropdown-item{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+  gap: 0.45rem;
 }
 
 .dropdown-item:hover{
-  background:rgba(56,199,194,0.12);
+  background: rgba(56,199,194,0.12);
 }
 
-/* keep all checkboxes aligned nicely */
+/* Checkbox locked to left edge */
 .dropdown-item input[type="checkbox"]{
-  margin:0;
-  flex-shrink:0;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;      /* Prevent checkbox shrinking */
 }
 
-/* keep label text vertically centered and tidy */
+/* Label text aligned left */
 .dropdown-item span{
-  line-height:1.2;
-  flex-grow:1;
+  flex-grow: 1;
+  text-align: left;
+  line-height: 1.2;
+  margin-left: 0;
 }
 
-.selected-container{
-  margin-top:0.4rem;
-  display:flex;
-  flex-wrap:wrap;
-  gap:0.3rem;
+/* Ensure dropdown menu doesn't indent items */
+.dropdown-menu{
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.selected-pill{
-  background:var(--pt-teal);
-  color:white;
-  padding:0.25rem 0.55rem;
-  border-radius:999px;
-  font-size:.78rem;
-  font-weight:600;
-}
-/* FORCE checkbox all the way left in dropdown */
-.dropdown-menu {
-  padding-left: 0;   /* remove left padding that causes centering */
-}
-
-.dropdown-item {
-  padding-left: 0.4rem !important;   /* minimal clean left padding */
-  justify-content: flex-start !important;
-}
-
-/* keep checkbox locked to left edge */
-.dropdown-item input[type="checkbox"]{
-  margin-left: 0 !important;
-  margin-right: 6px;        /* small space between box + text */
-  flex-shrink: 0;
-}
 
   </style>
 </head>
@@ -316,10 +296,10 @@
       <div class="section-title">About your pet</div>
 
       <label>Pet name *</label>
-      <input id="petName" name="Pet Name" required placeholder="e.g., Cooper" />
+      <input id="petName" name="Pet Name" required placeholder="e.g., Buddy" />
 
       <label>Phonetic pronunciation (optional)</label>
-      <input id="petPronounce" name="Phonetic" placeholder="e.g., KOO-per" />
+      <input id="petPronounce" name="Phonetic" placeholder="e.g., BUD-ee" />
 
       <div class="two-col">
         <div>
@@ -333,14 +313,14 @@
 
         <div>
           <label>Breed</label>
-          <input id="breed" name="Breed" placeholder="e.g., Australian Shepherd" />
+          <input id="breed" name="Breed" placeholder="e.g., Golden Retriever" />
         </div>
       </div>
 
       <div class="two-col">
         <div>
           <label>Age (optional)</label>
-          <input id="age" name="Age" placeholder="e.g., 8 years" />
+          <input id="age" name="Age" placeholder="e.g., 4 years" />
         </div>
 
         <div>
@@ -356,7 +336,7 @@
       <label>Physical Description (fur color, size, markings)</label>
       <input id="physicalDescription"
              name="Physical Description"
-             placeholder="e.g., brown/red fur with white chest and paws" />
+             placeholder="e.g., golden yellow coat, medium size" />
 
       <!-- PERSONALITY DROPDOWN -->
       <div class="section-title">Personality Keywords <span class="muted">(Pick 3)</span></div>
@@ -428,7 +408,7 @@
         <div>
           <label>Song Title (Optional)</label>
           <input id="songTitle" name="Song Title"
-                 placeholder='e.g., "Cooper Trooper"' />
+                 placeholder='e.g., "Buddy the Bandit"' />
         </div>
       </div>
 
