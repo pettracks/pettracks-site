@@ -208,21 +208,30 @@
     }
 
     .dropdown-item{
-      display:flex;
-      align-items:center;
-      padding:0.35rem 0.25rem;
-      cursor:pointer;
-      border-radius:8px;
-      transition:background .2s;
-    }
+  display:flex;
+  align-items:center;
+  gap:0.4rem;
+  padding:0.35rem 0.25rem;
+  cursor:pointer;
+  border-radius:8px;
+  transition:background .2s;
+}
 
-    .dropdown-item:hover{
-      background:rgba(56,199,194,0.12);
-    }
+.dropdown-item:hover{
+  background:rgba(56,199,194,0.12);
+}
 
-    .dropdown-item input{
-      margin-right:8px;
-    }
+/* keep all checkboxes aligned nicely */
+.dropdown-item input[type="checkbox"]{
+  margin:0;
+  flex-shrink:0;
+}
+
+/* keep label text vertically centered and tidy */
+.dropdown-item span{
+  line-height:1.2;
+}
+
 
     .selected-container{
       margin-top:0.4rem;
