@@ -150,97 +150,168 @@
     margin-top:1rem;
   }
 
- /* ======================================================
-   PET TRACKS CUSTOM DROPDOWNS — FINAL STABLE VERSION
-   ====================================================== */
+ /* ========== CLEAN, STABLE DROPDOWN STYLES ========== */
 
 .dropdown {
-  margin-bottom: 1rem;
-  position: relative;
+  margin-bottom:1rem;
+  position:relative;
 }
 
 /* Button */
 .dropdown-btn {
-  background: #fff;
-  border: 2px solid var(--pt-teal);
-  border-radius: 16px;
-  padding: 0.9rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+  background:#fff;
+  border:2px solid var(--pt-teal);
+  border-radius:16px;
+  padding:0.9rem 1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  cursor:pointer;
 }
 
 .dropdown-label {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size:1rem;
+  font-weight:600;
 }
 
 .dropdown-arrow {
-  transition: transform 0.25s ease;
+  transition:transform .25s ease;
 }
 
 .dropdown.open .dropdown-arrow {
-  transform: rotate(180deg);
+  transform:rotate(180deg);
 }
 
+/* Menu (closed) */
 .dropdown-menu {
-  display: none;
-  background: #ffffff;
+  display:none;
+  background:#fff;
+  border:2px solid var(--pt-teal);
+  border-radius:16px;
+  margin-top:0.4rem;
+  max-height:0;
+  overflow:hidden;
+  padding:0;
+  transition:max-height .25s ease, padding .25s ease;
+}
+
+/* Menu (open) */
+.dropdown.open .dropdown-menu {
+  display:block;
+  max-height:260px;
+  overflow-y:auto;
+  padding:0.75rem 0.6rem;
+}
+
+/* Each row */
+.dropdown-item {
+  display:flex;
+  align-items:center;
+  gap:0.55rem;
+  padding:0.4rem 0.25rem;
+  border-radius:8px;
+  cursor:pointer;
+  width:100%;
+}
+
+.dropdown-item:hover {
+  background:rgba(56,199,194,0.14);
+}
+
+/* Checkbox – left-aligned, no weird spacing */
+.dropdown-item input[type="checkbox"] {
+  margin:0;
+  flex-shrink:0;
+}
+
+/* Label next to checkbox */
+.dropdown-item span {
+  flex-grow:1;
+  line-height:1.2;
+  white-space:normal;
+}
+
+/* Selected pills */
+.selected-container {
+  margin-top:0.4rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.35rem;
+}
+
+.selected-pill {
+  background:var(--pt-teal);
+  color:#fff;
+  padding:0.22rem 0.55rem;
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:600;
+}
+
+/* 💥 FIX DROPDOWN LAYOUT COMPLETELY 💥 */
+
+/* Container */
+.dropdown {
+  position: relative; 
+  width: 100%; /* button stretches normally */
+}
+
+/* Button stays full width */
+.dropdown-btn {
+  width: 100%;
+}
+
+/* Menu: POPUP MODE */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;           /* directly under button */
+  left: 0;             /* aligns to left side */
+  background: #fff;
   border: 2px solid var(--pt-teal);
-  border-radius: 16px;
-  padding: 0.75rem 0.6rem;
-  margin-top: 0.4rem;
+  border-radius: 14px;
+
+  /* controls */
+  width: 100%;         /* EXACT SAME WIDTH AS BUTTON */
   max-height: 260px;
   overflow-y: auto;
+  padding: 0.75rem 0.6rem;
+  box-sizing: border-box;
+
+  /* hide when closed */
+  display: none;
+  z-index: 9999;        /* ensure it appears on top */
 }
 
-/* Only show when dropdown has .open */
+/* When dropdown is open */
 .dropdown.open .dropdown-menu {
   display: block;
 }
 
-/* Individual options */
+/* Each item: left aligned */
 .dropdown-item {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 0.55rem;
   padding: 0.4rem 0.25rem;
-  border-radius: 8px;
+  width: 15%;
   cursor: pointer;
 }
 
-.dropdown-item:hover {
-  background: rgba(56,199,194,0.14);
-}
-
-/* Proper left-aligned checkboxes */
 .dropdown-item input[type="checkbox"] {
   margin: 0;
   flex-shrink: 0;
 }
 
-/* Label text */
 .dropdown-item span {
+  white-space: nowrap;       /* keep label tidy */
   flex-grow: 1;
-  line-height: 1.2;
+  text-align: left;
 }
 
-/* Pills (selected items) */
-.selected-container {
-  margin-top: 0.4rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.selected-pill {
-  background: var(--pt-teal);
-  color: #fff;
-  padding: 0.22rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
+/* Fix for weird text clipping caused by parent elements */
+.dropdown-menu * {
+  text-align: left !important;
 }
 
 </style>
@@ -521,62 +592,75 @@ function getPronouns(g){
 }
 
 /* ============================================================
-   DROPDOWN SYSTEM
+   FINAL STABLE DROPDOWN ENGINE — MATCHES YOUR EXACT HTML
    ============================================================ */
-function buildDropdownItems(menuId, values, key){
-  const menu=$(menuId);
-  menu.innerHTML="";
-  values.forEach(v=>{
-    const div=document.createElement("div");
-    div.className="dropdown-item";
-    div.innerHTML=`
-      <input type="checkbox" value="${v}" data-group="${key}">
-      <span>${v}</span>
+
+function buildDropdownItems(menuId, values, groupName){
+  const menu = $(menuId);
+  menu.innerHTML = "";
+
+  values.forEach(text => {
+    const row = document.createElement("div");
+    row.className = "dropdown-item";
+    row.innerHTML = `
+      <input type="checkbox" value="${text}" data-group="${groupName}">
+      <span>${text}</span>
     `;
-    menu.appendChild(div);
+    menu.appendChild(row);
   });
 }
 
-function getDropdownSelected(group){
-  return [...document.querySelectorAll(`input[data-group="${group}"]:checked`)]
-    .map(b=>b.value);
+function getDropdownSelected(groupName){
+  return [...document.querySelectorAll(`input[data-group="${groupName}"]:checked`)]
+    .map(i => i.value);
 }
 
-function updateSelectedPills(id, values){
-  const c=$(id);
-  c.innerHTML="";
+function updatePills(containerId, values){
+  const box = $(containerId);
+  box.innerHTML = "";
   values.forEach(v=>{
-    const pill=document.createElement("div");
-    pill.className="selected-pill";
-    pill.textContent=v;
-    c.appendChild(pill);
+    const pill = document.createElement("div");
+    pill.className = "selected-pill";
+    pill.textContent = v;
+    box.appendChild(pill);
   });
 }
 
-function enforceDropdownLimits(dropdown, group){
-  const max=Number(dropdown.dataset.limit||99);
-  dropdown.querySelectorAll(`input[data-group="${group}"]`)
-    .forEach(box=>{
-      box.addEventListener("change",()=>{
-        const sel=getDropdownSelected(group);
-        if(sel.length>max){
-          box.checked=false;
-          return;
-        }
-        updateSelectedPills(
-          dropdown.querySelector(".selected-container").id,
-          sel
-        );
-      });
-    });
+function attachDropdownToggle(dropdownId){
+  const dropdown = $(dropdownId);
+  const btn = dropdown.querySelector(".dropdown-btn");
+  const menu = dropdown.querySelector(".dropdown-menu");
+
+  // Toggle on button click
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    dropdown.classList.toggle("open");
+  });
+
+  // Close if clicking outside
+  document.addEventListener("click", e => {
+    if(!dropdown.contains(e.target)){
+      dropdown.classList.remove("open");
+    }
+  });
 }
 
-function attachDropdownToggle(id){
-  const d=$(id);
-  const btn=d.querySelector(".dropdown-btn");
-  btn.addEventListener("click",()=>d.classList.toggle("open"));
-  document.addEventListener("click",e=>{
-    if(!d.contains(e.target)) d.classList.remove("open");
+function enforceLimits(dropdownId, groupName, max){
+  const dropdown = $(dropdownId);
+  const menu = dropdown.querySelector(".dropdown-menu");
+  const pills = dropdown.querySelector(".selected-container");
+
+  menu.addEventListener("change", e => {
+    if(e.target.type !== "checkbox") return;
+
+    const selected = getDropdownSelected(groupName);
+
+    if(selected.length > max){
+      e.target.checked = false;
+      return;
+    }
+
+    updatePills(pills.id, selected);
   });
 }
 
@@ -724,18 +808,20 @@ async function buildPromptsBeforeSubmit(){
    ============================================================ */
 document.addEventListener("DOMContentLoaded", ()=>{
 
-  /* Build dropdowns */
-  buildDropdownItems("menu-personality", PERSONALITY_OPTIONS, "personality");
-  buildDropdownItems("menu-descriptors", DESCRIBE_OPTIONS, "descriptors");
-  buildDropdownItems("menu-favs", FAVORITE_OPTIONS, "favs");
+/* Build dropdowns */
+buildDropdownItems("menu-personality", PERSONALITY_OPTIONS, "personality");
+buildDropdownItems("menu-descriptors", DESCRIBE_OPTIONS, "descriptors");
+buildDropdownItems("menu-favs", FAVORITE_OPTIONS, "favs");
 
-  enforceDropdownLimits($("dropdown-personality"),"personality");
-  enforceDropdownLimits($("dropdown-descriptors"),"descriptors");
-  enforceDropdownLimits($("dropdown-favs"),"favs");
+/* Enforce limits */
+enforceLimits("dropdown-personality", "personality", 3);
+enforceLimits("dropdown-descriptors", "descriptors", 3);
+enforceLimits("dropdown-favs", "favs", 3); // 2–3 validated later
 
-  attachDropdownToggle("dropdown-personality");
-  attachDropdownToggle("dropdown-descriptors");
-  attachDropdownToggle("dropdown-favs");
+/* Toggle behavior */
+attachDropdownToggle("dropdown-personality");
+attachDropdownToggle("dropdown-descriptors");
+attachDropdownToggle("dropdown-favs");
 
 // CLOSE ALL DROPDOWNS ON LOAD
 document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
@@ -782,6 +868,8 @@ document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
   });
 
 });
+
+
 </script>
 </body>
 </html>
