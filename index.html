@@ -869,6 +869,96 @@ document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
 
 });
 
+// --- CLOUDINARY UPLOAD CONFIG ---
+const CLOUD_NAME = "df45tq3kq";
+const UPLOAD_PRESET = "y9fwlqza";
+
+// Upload image to Cloudinary
+async function uploadImageToCloudinary(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", UPLOAD_PRESET);
+
+  const uploadURL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+  const response = await fetch(uploadURL, {
+    method: "POST",
+    body: formData
+  });
+
+  if (!response.ok) {
+    alert("Photo upload failed. Try again.");
+    throw new Error("Cloudinary upload error");
+  }
+
+  const data = await response.json();
+  return data.secure_url; // final URL
+}
+
+// --- EMAILJS CONFIG ---
+emailjs.init("bwy1ZvFrz0tKhxbRO");
+
+// When form is submitted:
+document.getElementById("pettracks-form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const fileInput = document.getElementById("petPhoto");
+  let photoURL = "";
+
+  // If customer uploaded a photo → upload to Cloudinary
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    photoURL = await uploadImageToCloudinary(file);
+    document.getElementById("photoURL").value = photoURL;
+  }
+
+  // Build EmailJS template parameters
+  const formParams = {
+    customerName: document.getElementById("customerName").value,
+    customerEmail: document.getElementById("customerEmail").value,
+
+    petName: document.getElementById("petName").value,
+    petPronounce: document.getElementById("petPronounce").value,
+    species: document.getElementById("species").value,
+    breed: document.getElementById("breed").value,
+    age: document.getElementById("age").value,
+    gender: document.getElementById("gender").value,
+    phys: document.getElementById("physicalDescription").value,
+
+    personality: getCheckedValues("personality").join(", "),
+    descriptors: getCheckedValues("descriptors").join(", "),
+    favThings: getCheckedValues("favs").join(", "),
+
+    special: document.getElementById("special").value,
+    genre: document.getElementById("genre").value,
+    songTitle: document.getElementById("songTitle").value,
+    extras: document.getElementById("extras").value,
+
+    songPrompt: document.getElementById("songOutput").textContent,
+    albumPrompt: document.getElementById("artOutput").textContent,
+
+    photoURL: photoURL || "No photo uploaded"
+  };
+
+  // SEND STAFF EMAIL
+  emailjs.send("service_4m9uzxt", "template_stafforder", formParams)
+    .then(() => console.log("Staff email sent"))
+    .catch(err => console.error("Staff email error:", err));
+
+  // SEND CUSTOMER EMAIL
+  emailjs.send("service_4m9uzxt", "template_custconfirm", formParams)
+    .then(() => console.log("Customer email sent"))
+    .catch(err => console.error("Customer email error:", err));
+
+  // Redirect to thank-you page
+  window.location.href = "thankyou.html";
+});
+
+// Helper to get selected checkbox values
+function getCheckedValues(name) {
+  return [...document.querySelectorAll(`input[data-name="${name}"]:checked`)]
+    .map(cb => cb.value);
+}
 
 </script>
 </body>
