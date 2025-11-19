@@ -897,25 +897,27 @@ async function uploadImageToCloudinary(file) {
   return data.secure_url; // final URL
 }
 
-// --- EMAILJS CONFIG ---
-emailjs.init("bwy1ZvFrz0tKhxbRO");
-
-// When form is submitted:
 document.getElementById("pettracksForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
+  const form = document.getElementById("pettracksForm");
   const fileInput = document.getElementById("petPhoto");
   let photoURL = "";
 
-  // If customer uploaded a photo → upload to Cloudinary
+  // --- Upload image to Cloudinary (if selected) ---
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
     photoURL = await uploadImageToCloudinary(file);
     document.getElementById("photoURL").value = photoURL;
   }
 
-  // Build EmailJS template parameters
-  const formParams = {
+  // --- Gather selected values from dropdowns ---
+  const personalityVals = getDropdownSelected("personality");
+  const descriptorVals = getDropdownSelected("descriptors");
+  const favVals = getDropdownSelected("favs");
+
+  // --- Build JSON payload for backend ---
+  const payload = {
     customerName: document.getElementById("customerName").value,
     customerEmail: document.getElementById("customerEmail").value,
 
@@ -927,9 +929,9 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
     gender: document.getElementById("gender").value,
     phys: document.getElementById("physicalDescription").value,
 
-    personality: getCheckedValues("personality").join(", "),
-    descriptors: getCheckedValues("descriptors").join(", "),
-    favThings: getCheckedValues("favs").join(", "),
+    personality: personalityVals,
+    descriptors: descriptorVals,
+    favThings: favVals,
 
     special: document.getElementById("special").value,
     genre: document.getElementById("genre").value,
@@ -938,29 +940,24 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
 
     songPrompt: document.getElementById("songOutput").textContent,
     albumPrompt: document.getElementById("artOutput").textContent,
-
-    photoURL: photoURL || "No photo uploaded"
+    photoURL: photoURL
   };
 
-  // SEND STAFF EMAIL
-  emailjs.send("service_4m9uzxt", "template_stafforder", formParams)
-    .then(() => console.log("Staff email sent"))
-    .catch(err => console.error("Staff email error:", err));
+  // --- Send to Vercel API ---
+  const response = await fetch("https://pettracks-site.vercel.app/api/send-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
 
-  // SEND CUSTOMER EMAIL
-  emailjs.send("service_4m9uzxt", "template_custconfirm", formParams)
-    .then(() => console.log("Customer email sent"))
-    .catch(err => console.error("Customer email error:", err));
+  const result = await response.json();
 
-  // Redirect to thank-you page
-  window.location.href = "thankyou.html";
+  if (result.success) {
+    window.location.href = "thankyou.html";
+  } else {
+    alert("Something went wrong sending your order. Please try again.");
+  }
 });
-
-// Helper to get selected checkbox values
-function getCheckedValues(name) {
-  return [...document.querySelectorAll(`input[data-name="${name}"]:checked`)]
-    .map(cb => cb.value);
-}
 
 </script>
 </body>
