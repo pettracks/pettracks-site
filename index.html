@@ -493,6 +493,11 @@
         <div id="albumError" class="error hidden"></div>
       </div>
 
+<div style="display:none;">
+  <div id="songOutput"></div>
+  <div id="artOutput"></div>
+</div>
+
       <!-- HIDDEN PROMPT FIELDS (for staff email) -->
       <input type="hidden" id="hiddenSongPrompt" name="songPrompt" />
       <input type="hidden" id="hiddenArtPrompt" name="albumPrompt" />
@@ -864,8 +869,8 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
     songTitle: document.getElementById("songTitle").value,
     extras: document.getElementById("extras").value,
 
-    songPrompt: "",
-    albumPrompt: "",
+    songPrompt: (document.getElementById("songOutput")?.textContent || ""),
+    albumPrompt: (document.getElementById("artOutput")?.textContent || ""),
     photoURL: photoURL
   };
 
@@ -884,6 +889,7 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
     alert("Something went wrong sending your order. Please try again.");
   }
 });
+
 
 </script>
 </body>
