@@ -505,12 +505,9 @@
     </form>
   </section>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <script>
-/* Initialize EmailJS */
-(function(){
-  emailjs.init("bwy1ZvFrz0tKhxbRO"); // YOUR PUBLIC KEY
-})();
+
 
 /* ============================================================
    OPTION SETS
@@ -762,114 +759,6 @@ function buildAlbumPrompt(d){
   `.replace(/\s+/g," ").trim();
 }
 
-/* ============================================================
-   EMAILJS SUBMIT HANDLER
-   ============================================================ */
-async function buildPromptsBeforeSubmit(){
-  $("formError").classList.add("hidden");
-  $("formError").textContent="";
-
-  const tier=document.querySelector('input[name="tier"]:checked').value;
-
-  const songErrs=validateSong();
-  const albumErrs=validateAlbum(tier);
-
-  if(songErrs.length || albumErrs.length){
-    $("formError").textContent = [...songErrs, ...albumErrs].join(" ");
-    $("formError").classList.remove("hidden");
-    return false;
-  }
-
-  const d={
-    customerName:val("customerName"),
-    customerEmail:val("customerEmail"),
-    petName:val("petName"),
-    petPronounce:val("petPronounce"),
-    species:$("species").value,
-    breed:val("breed"),
-    age:val("age"),
-    gender:$("gender").value,
-    phys:val("physicalDescription"),
-    personality:getDropdownSelected("personality"),
-    descriptors:getDropdownSelected("descriptors"),
-    favThings:getDropdownSelected("favs"),
-    special:val("special"),
-    genre:$("genre").value,
-    songTitle:val("songTitle"),
-    extras:val("extras")
-  };
-
-  $("hiddenSongPrompt").value = buildSongPrompt(d);
-  $("hiddenArtPrompt").value = tier==="song+cover" ? buildAlbumPrompt(d) : "";
-
-  return true;
-}
-
-/* ============================================================
-   FINAL FORM SUBMISSION WITH EMAILJS
-   ============================================================ */
-document.addEventListener("DOMContentLoaded", ()=>{
-
-/* Build dropdowns */
-buildDropdownItems("menu-personality", PERSONALITY_OPTIONS, "personality");
-buildDropdownItems("menu-descriptors", DESCRIBE_OPTIONS, "descriptors");
-buildDropdownItems("menu-favs", FAVORITE_OPTIONS, "favs");
-
-/* Enforce limits */
-enforceLimits("dropdown-personality", "personality", 3);
-enforceLimits("dropdown-descriptors", "descriptors", 3);
-enforceLimits("dropdown-favs", "favs", 3); // 2–3 validated later
-
-/* Toggle behavior */
-attachDropdownToggle("dropdown-personality");
-attachDropdownToggle("dropdown-descriptors");
-attachDropdownToggle("dropdown-favs");
-
-// CLOSE ALL DROPDOWNS ON LOAD
-document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
-
-  /* Tier toggle */
-  document.querySelectorAll('input[name="tier"]').forEach(r=>{
-    r.addEventListener("change",()=>{
-      const enable=r.value==="song+cover";
-      const af=$("albumFields");
-      af.classList.toggle("disabled", !enable);
-      af.querySelectorAll("input,textarea").forEach(el=> el.disabled=!enable);
-      $("albumError").classList.add("hidden");
-      $("priceDisplay").textContent = enable
-        ? "Current total: $29.99"
-        : "Current total: $19.99";
-    });
-  });
-
-  /* Submit handler */
-  $("pettracksForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
-
-    const ok = await buildPromptsBeforeSubmit();
-    if(!ok) return;
-
-    const tier=document.querySelector('input[name="tier"]:checked').value;
-
-    const serviceID = "service_4m9uzxt";
-    const staffTemplate = "template_stafforder";
-    const custTemplate = "template_custconfirm";
-
-    const form = $("pettracksForm");
-
-    try{
-      await emailjs.sendForm(serviceID, staffTemplate, form);
-      await emailjs.sendForm(serviceID, custTemplate, form);
-
-      window.location.href="thankyou.html";
-    } catch(err){
-      $("formError").textContent="Submission failed. Please try again.";
-      $("formError").classList.remove("hidden");
-      console.error(err);
-    }
-  });
-
-});
 
 // --- CLOUDINARY UPLOAD CONFIG ---
 const CLOUD_NAME = "df45tq3kq";
