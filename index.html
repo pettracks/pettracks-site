@@ -760,6 +760,43 @@ function buildAlbumPrompt(d){
 }
 
 
+
+document.addEventListener("DOMContentLoaded", ()=>{
+
+/* Build dropdowns */
+buildDropdownItems("menu-personality", PERSONALITY_OPTIONS, "personality");
+buildDropdownItems("menu-descriptors", DESCRIBE_OPTIONS, "descriptors");
+buildDropdownItems("menu-favs", FAVORITE_OPTIONS, "favs");
+
+/* Enforce limits */
+enforceLimits("dropdown-personality", "personality", 3);
+enforceLimits("dropdown-descriptors", "descriptors", 3);
+enforceLimits("dropdown-favs", "favs", 3); // 2–3 validated later
+
+/* Toggle behavior */
+attachDropdownToggle("dropdown-personality");
+attachDropdownToggle("dropdown-descriptors");
+attachDropdownToggle("dropdown-favs");
+
+// CLOSE ALL DROPDOWNS ON LOAD
+document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
+
+  /* Tier toggle */
+  document.querySelectorAll('input[name="tier"]').forEach(r=>{
+    r.addEventListener("change",()=>{
+      const enable=r.value==="song+cover";
+      const af=$("albumFields");
+      af.classList.toggle("disabled", !enable);
+      af.querySelectorAll("input,textarea").forEach(el=> el.disabled=!enable);
+      $("albumError").classList.add("hidden");
+      $("priceDisplay").textContent = enable
+        ? "Current total: $29.99"
+        : "Current total: $19.99";
+    });
+  });
+
+});
+
 // --- CLOUDINARY UPLOAD CONFIG ---
 const CLOUD_NAME = "df45tq3kq";
 const UPLOAD_PRESET = "y9fwlqza";
