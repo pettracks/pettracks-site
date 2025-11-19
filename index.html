@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- GLOBAL + DROPDOWN STYLES -->
-  <style>
+  <style data-version="5">
   :root{
     --bg:#f6f7ff;
     --card:#fff;
@@ -150,11 +150,10 @@
     margin-top:1rem;
   }
 
-  /* ======================================================
-     PET TRACKS CUSTOM DROPDOWNS (Branded — teal/purple)
-     ====================================================== */
+ /* ======================================================
+   PET TRACKS CUSTOM DROPDOWNS — FINAL STABLE VERSION
+   ====================================================== */
 
-  /* --- DROPDOWN CORE --- */
 .dropdown {
   margin-bottom: 1rem;
   position: relative;
@@ -177,7 +176,6 @@
   font-weight: 600;
 }
 
-/* Arrow */
 .dropdown-arrow {
   transition: transform 0.25s ease;
 }
@@ -186,7 +184,7 @@
   transform: rotate(180deg);
 }
 
-/* Dropdown Panel */
+/* Menu (closed by default) */
 .dropdown-menu {
   display: none;
   background: #ffffff;
@@ -198,42 +196,43 @@
   overflow-y: auto;
 }
 
-/* Open state actually shows menu */
+/* Only show when dropdown has .open */
 .dropdown.open .dropdown-menu {
   display: block;
 }
 
-/* Individual option */
+/* Individual options */
 .dropdown-item {
   display: flex;
   align-items: center;
   gap: 0.55rem;
   padding: 0.4rem 0.25rem;
-  cursor: pointer;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .dropdown-item:hover {
   background: rgba(56,199,194,0.14);
 }
 
-/* Fix checkbox alignment LEFT */
+/* Proper left-aligned checkboxes */
 .dropdown-item input[type="checkbox"] {
   margin: 0;
   flex-shrink: 0;
 }
 
-/* Text inside option */
+/* Label text */
 .dropdown-item span {
+  flex-grow: 1;
   line-height: 1.2;
 }
 
-/* Selected tags under dropdown */
+/* Pills (selected items) */
 .selected-container {
   margin-top: 0.4rem;
   display: flex;
-  gap: 0.35rem;
   flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .selected-pill {
