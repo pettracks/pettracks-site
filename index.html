@@ -544,32 +544,42 @@ function songStyleForGenre(g){
   if(g.includes("jazz"))      return "cool jazz number";
   if(g.includes("children"))  return "fun, sing-along children’s song";
   if(g.includes("edm"))       return "high-energy EDM dance track";
-  return "upbeat pop song";
 }
 
 function artStyleForGenre(g){
-  g=g.toLowerCase();
-  if(g.includes("happy pop"))
-    return "vibrant pop-art cover with colorful gradients, glossy lighting, and the pet posing playfully like a cheerful pop icon";
-  if(g.includes("country"))
-    return "rustic countryside poster style with warm sunlight, soft grain, and the pet posed proudly like a country star";
-  if(g.includes("rock"))
-    return "bold stage-light design with gritty shadows, dramatic contrast, and the pet in an energetic rock-star pose";
-  if(g.includes("acoustic"))
-    return "earthy minimalist hand-drawn scene with soft pastels and the pet sitting calmly beside an acoustic guitar";
-  if(g.includes("hip-hop"))
-    return "urban street-art aesthetic with graffiti textures and the pet upright in a confident anthropomorphic pose wearing bling";
-  if(g.includes("r&b"))
-    return "moody, luxe studio portrait with glossy lighting";
-  if(g.includes("classical"))
-    return "refined classical portrait with marble texture and elegant serif typography";
-  if(g.includes("jazz"))
-    return "mid-century geometric poster with warm tones and abstract shapes";
-  if(g.includes("children"))
-    return "playful cartoon artwork with doodles and bright stars";
-  if(g.includes("edm"))
-    return "neon futuristic scene with glowing trails and the pet in an energetic DJ pose";
-  return "clean, square album cover of the pet";
+  g = g.toLowerCase();
+
+  if (g.includes("happy pop"))
+    return "vibrant pop-art cover with colorful gradients, glossy lighting, and the pet posing playfully like a cheerful pop icon, using bold rounded sans-serif pop typography";
+
+  if (g.includes("country"))
+    return "rustic countryside poster style with warm sunlight, soft grain, and the pet posed proudly like a country star, featuring classic western serif typography";
+
+  if (g.includes("rock"))
+    return "bold stage-light design with gritty shadows, dramatic contrast, and the pet in an energetic rock-star pose, with distressed heavy-metal or grunge poster typography";
+
+  if (g.includes("acoustic"))
+    return "earthy minimalist hand-drawn scene with soft pastels and the pet sitting calmly beside an acoustic guitar, paired with simple clean handwritten or folk-style serif typography";
+
+  if (g.includes("hip-hop"))
+    return "urban street-art aesthetic with graffiti textures and the pet upright in a confident anthropomorphic pose wearing bling, styled with bold blocky hip-hop or graffiti-inspired typography";
+
+  if (g.includes("r&b"))
+    return "moody, luxe studio portrait with glossy lighting and rich shadows, complemented by smooth elegant R&B script or neo-soul typography";
+
+  if (g.includes("classical"))
+    return "refined classical portrait with marble texture and elegant serif typography, featuring dramatic lighting and traditional orchestral poster styling";
+
+  if (g.includes("jazz"))
+    return "mid-century geometric poster with warm tones and abstract shapes, paired with retro angular jazz-club typography";
+
+  if (g.includes("children"))
+    return "playful cartoon artwork with doodles and bright stars, using bubbly kid-friendly rounded typography";
+
+  if (g.includes("edm"))
+    return "neon futuristic scene with glowing trails and the pet in an energetic DJ pose, featuring sharp geometric techno or cyberpunk typography";
+
+  return "clean, square 1:1 album cover of the pet with typography matching the overall visual style.";
 }
 
 /* ============================================================
