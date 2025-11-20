@@ -131,8 +131,8 @@ We’ll email your completed track and artwork as soon as they’re ready!
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "Pet Tracks <onboarding@resend.dev>",   // ← sandbox sender
-      to: "sndharrison16@gmail.com",                // MUST be your email in sandbox mode
+      from: "Pet Tracks <onboarding@resend.dev>",  
+      to: data.customerEmail,                
       subject: "Your Pet Tracks Order Is Confirmed! 🎵🐾",
       text: customerMessage
     })
