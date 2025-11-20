@@ -1,16 +1,15 @@
 // /api/send-email.js
-// FINAL, CORRECTED VERSION – with CORS + JSON parsing + 2 emails
+// RESEND SANDBOX MODE — No domain required
 
 export default async function handler(req, res) {
 
   /* =============================
-     CORS — REQUIRED FOR GITHUB PAGES
+     CORS for GitHub Pages
      ============================= */
   res.setHeader("Access-Control-Allow-Origin", "https://pettracks.github.io");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // Preflight request
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -20,14 +19,12 @@ export default async function handler(req, res) {
   }
 
   /* =============================
-     JSON BODY PARSING — REQUIRED
+     Parse JSON body
      ============================= */
   let data;
-
   try {
     data = req.body;
 
-    // If Vercel didn't parse JSON, parse it manually
     if (!data || typeof data !== "object") {
       const raw = await new Promise(resolve => {
         let body = "";
@@ -46,7 +43,7 @@ export default async function handler(req, res) {
   }
 
   /* =============================
-     BUILD STAFF EMAIL CONTENT
+     STAFF EMAIL
      ============================= */
   const staffMessage = `
 New Pet Tracks Order  
@@ -84,9 +81,6 @@ Photo URL:
 ${data.photoURL}
   `;
 
-  /* =============================
-     SEND STAFF EMAIL (via Resend)
-     ============================= */
   const staffResp = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -94,8 +88,8 @@ ${data.photoURL}
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "Pet Tracks <orders@pettracks.app>",
-      to: "sndharrison16@gmail.com",
+      from: "Pet Tracks <onboarding@resend.dev>",   // ← Sandbox sender
+      to: "sndharrison16@gmail.com",                // Staff email
       subject: `New Pet Tracks Order: ${data.petName}`,
       text: staffMessage
     })
@@ -112,7 +106,7 @@ ${data.photoURL}
   }
 
   /* =============================
-     BUILD CUSTOMER CONFIRMATION EMAIL
+     CUSTOMER CONFIRMATION EMAIL
      ============================= */
   const customerMessage = `
 Hi ${data.customerName}! 👋
@@ -130,9 +124,6 @@ We’ll email your completed track and artwork as soon as they’re ready!
 – The Pet Tracks Team 🎵🐾
   `;
 
-  /* =============================
-     SEND CUSTOMER EMAIL
-     ============================= */
   const customerResp = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -140,8 +131,8 @@ We’ll email your completed track and artwork as soon as they’re ready!
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "Pet Tracks <orders@pettracks.app>",
-      to: data.customerEmail,
+      from: "Pet Tracks <onboarding@resend.dev>",   // ← sandbox sender
+      to: "sndharrison16@gmail.com",                // MUST be your email in sandbox mode
       subject: "Your Pet Tracks Order Is Confirmed! 🎵🐾",
       text: customerMessage
     })
@@ -158,7 +149,7 @@ We’ll email your completed track and artwork as soon as they’re ready!
   }
 
   /* =============================
-     SUCCESS — BOTH EMAILS SENT
+     SUCCESS
      ============================= */
   return res.status(200).json({ success: true });
 }
