@@ -132,7 +132,7 @@ We’ll email your completed track and artwork as soon as they’re ready!
     },
     body: JSON.stringify({
       from: "Pet Tracks <onboarding@resend.dev>",  
-      to: data.customerEmail,                
+      to: "sndharrison16@gmail.com",               
       subject: "Your Pet Tracks Order Is Confirmed! 🎵🐾",
       text: customerMessage
     })
