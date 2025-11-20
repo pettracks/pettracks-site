@@ -493,10 +493,6 @@
         <div id="albumError" class="error hidden"></div>
       </div>
 
-<div style="display:none;">
-  <div id="songOutput"></div>
-  <div id="artOutput"></div>
-</div>
 
       <!-- HIDDEN PROMPT FIELDS (for staff email) -->
       <input type="hidden" id="hiddenSongPrompt" name="songPrompt" />
@@ -847,8 +843,36 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
   const descriptorVals = getDropdownSelected("descriptors");
   const favVals = getDropdownSelected("favs");
 
+
   // --- Build JSON payload for backend ---
-  const payload = {
+// Build prompts BEFORE sending
+const songPrompt = buildSongPrompt({
+  petName: document.getElementById("petName").value,
+  petPronounce: document.getElementById("petPronounce").value,
+  species: document.getElementById("species").value,
+  breed: document.getElementById("breed").value,
+  age: document.getElementById("age").value,
+  gender: document.getElementById("gender").value,
+  phys: document.getElementById("physicalDescription").value,
+  personality: personalityVals,
+  descriptors: descriptorVals,
+  favThings: favVals,
+  special: document.getElementById("special").value,
+  genre: document.getElementById("genre").value,
+  songTitle: document.getElementById("songTitle").value
+});
+
+const albumPrompt = buildAlbumPrompt({
+  petName: document.getElementById("petName").value,
+  species: document.getElementById("species").value,
+  breed: document.getElementById("breed").value,
+  phys: document.getElementById("physicalDescription").value,
+  extras: document.getElementById("extras").value,
+  genre: document.getElementById("genre").value,
+  songTitle: document.getElementById("songTitle").value
+});
+  
+const payload = {
     customerName: document.getElementById("customerName").value,
     customerEmail: document.getElementById("customerEmail").value,
 
@@ -869,8 +893,9 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
     songTitle: document.getElementById("songTitle").value,
     extras: document.getElementById("extras").value,
 
-    songPrompt: (document.getElementById("songOutput")?.textContent || ""),
-    albumPrompt: (document.getElementById("artOutput")?.textContent || ""),
+    songPrompt: songPrompt,
+    albumPrompt: albumPrompt,
+
     photoURL: photoURL
   };
 
