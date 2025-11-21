@@ -22,6 +22,61 @@
     --pt-navy:#0F2A3F;
   }
 
+/* ─────────────────────────────────────────────
+   SOFT HERO HEADER (Professional + Friendly)
+   ───────────────────────────────────────────── */
+
+.hero-header {
+  background: linear-gradient(135deg, #eef1ff 0%, #dfe7ff 100%);
+  padding: 2.5rem 1.5rem 3rem;
+  text-align: center;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin-bottom: 2rem;
+  color: #0F2A3F; /* your navy brand color */
+}
+
+/* Site Title */
+.site-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  color: #0F2A3F;
+}
+
+/* Headline */
+.hero-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 auto 1rem;
+  line-height: 1.25;
+  max-width: 900px;
+  color: #0F2A3F;
+}
+
+/* Subheading */
+.hero-header .subtitle {
+  max-width: 900px;
+  margin: 0.5rem auto 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #3b4155;
+}
+
+/* Mobile Optimization */
+@media (max-width: 600px) {
+  .hero-header h1 {
+    font-size: 1.55rem;
+  }
+  .site-title {
+    text-align: center;
+  }
+}
+
+
   *{box-sizing:border-box;}
 
   body{
@@ -318,10 +373,18 @@
 </head>
 
 <body>
-<header>
-  <h1>Pet Tracks – Song & Album Cover Request</h1>
-  <p class="subtitle">Turn your pet’s personality into a custom track 🎵🐾</p>
+<header class="hero-header">
+  <div class="site-title">Pet Tracks</div>
+
+  <div class="hero-content">
+    <h1>Every Pet Has a Story — Let’s Turn Theirs Into Music</h1>
+    <p class="subtitle">
+      AI-generated, professionally crafted custom songs and album covers that celebrate your beloved pet.
+      From playful pups to curious cats, we turn their personality, quirks, and charm into unforgettable art.
+    </p>
+  </div>
 </header>
+
 
 <main class="container">
   <!-- LEFT: FORM -->
@@ -341,19 +404,19 @@
 
       <!-- PACKAGE -->
       <div class="section-title">Choose your package</div>
-      <div class="price-display" id="priceDisplay">Current total: $19.99</div>
+     
 
       <div class="tier-row">
         <label class="tier">
           <input type="radio" name="tier" value="song" checked />
-          <span><strong>Paw Single</strong> — 1–2 Minute Song
-            <span class="pill">$19.99</span></span>
+          <span><strong>Paw Single</strong> — 1–3 Minute Song
+           
         </label>
 
         <label class="tier">
           <input type="radio" name="tier" value="song+cover" />
           <span><strong>Paw Deluxe</strong> — Song + Album Cover
-            <span class="pill">$29.99</span></span>
+            
         </label>
       </div>
 
@@ -582,6 +645,7 @@ function artStyleForGenre(g){
   return "clean, square 1:1 album cover of the pet with typography matching the overall visual style.";
 }
 
+
 /* ============================================================
    HELPERS
    ============================================================ */
@@ -800,9 +864,7 @@ document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("open"));
       af.classList.toggle("disabled", !enable);
       af.querySelectorAll("input,textarea").forEach(el=> el.disabled=!enable);
       $("albumError").classList.add("hidden");
-      $("priceDisplay").textContent = enable
-        ? "Current total: $29.99"
-        : "Current total: $19.99";
+     
     });
   });
 
