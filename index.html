@@ -944,32 +944,45 @@ const albumPrompt = buildAlbumPrompt({
   songTitle: document.getElementById("songTitle").value
 });
   
+// detect selected tier
+const tier = document.querySelector('input[name="tier"]:checked').value;
+
+// build prompts safely
+const songPrompt = document.getElementById("songOutput")?.textContent || "";
+let albumPrompt = "";
+
+// only generate album prompt for Paw Deluxe
+if (tier === "song+cover") {
+  albumPrompt = document.getElementById("artOutput")?.textContent || "";
+}
+
+// build JSON payload
 const payload = {
-    customerName: document.getElementById("customerName").value,
-    customerEmail: document.getElementById("customerEmail").value,
+  customerName: document.getElementById("customerName").value,
+  customerEmail: document.getElementById("customerEmail").value,
 
-    petName: document.getElementById("petName").value,
-    petPronounce: document.getElementById("petPronounce").value,
-    species: document.getElementById("species").value,
-    breed: document.getElementById("breed").value,
-    age: document.getElementById("age").value,
-    gender: document.getElementById("gender").value,
-    phys: document.getElementById("physicalDescription").value,
+  petName: document.getElementById("petName").value,
+  petPronounce: document.getElementById("petPronounce").value,
+  species: document.getElementById("species").value,
+  breed: document.getElementById("breed").value,
+  age: document.getElementById("age").value,
+  gender: document.getElementById("gender").value,
+  phys: document.getElementById("physicalDescription").value,
 
-    personality: personalityVals,
-    descriptors: descriptorVals,
-    favThings: favVals,
+  personality: personalityVals,
+  descriptors: descriptorVals,
+  favThings: favVals,
 
-    special: document.getElementById("special").value,
-    genre: document.getElementById("genre").value,
-    songTitle: document.getElementById("songTitle").value,
-    extras: document.getElementById("extras").value,
+  special: document.getElementById("special").value,
+  genre: document.getElementById("genre").value,
+  songTitle: document.getElementById("songTitle").value,
+  extras: document.getElementById("extras").value,
 
-    songPrompt: songPrompt,
-    albumPrompt: albumPrompt,
+  songPrompt: songPrompt,
+  albumPrompt: albumPrompt,
+  photoURL: photoURL
+};
 
-    photoURL: photoURL
-  };
 
   // --- Send to Vercel API ---
   const response = await fetch("https://pettracks-site.vercel.app/api/send-email", {
