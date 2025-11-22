@@ -168,6 +168,34 @@
     gap:.45rem;
     cursor:pointer;
   }
+/* --- MOBILE FIX FOR TIERS --- */
+@media (max-width: 600px) {
+
+  .tier-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .tier {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.8rem 0.9rem;
+    align-items: flex-start;
+  }
+
+  .tier input[type="radio"] {
+    margin-top: 0.2rem;
+  }
+
+  .tier span {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+  }
+}
 
   .price-display{
     font-weight:700;
@@ -916,45 +944,41 @@ document.getElementById("pettracksForm").addEventListener("submit", async functi
   const favVals = getDropdownSelected("favs");
 
 
-  // --- Build JSON payload for backend ---
-// Build prompts BEFORE sending
+  // Always generate a song prompt
 const songPrompt = buildSongPrompt({
-  petName: document.getElementById("petName").value,
-  petPronounce: document.getElementById("petPronounce").value,
-  species: document.getElementById("species").value,
-  breed: document.getElementById("breed").value,
-  age: document.getElementById("age").value,
-  gender: document.getElementById("gender").value,
-  phys: document.getElementById("physicalDescription").value,
+  petName: $("petName").value,
+  petPronounce: $("petPronounce").value,
+  species: $("species").value,
+  breed: $("breed").value,
+  age: $("age").value,
+  gender: $("gender").value,
+  phys: $("physicalDescription").value,
   personality: personalityVals,
   descriptors: descriptorVals,
   favThings: favVals,
-  special: document.getElementById("special").value,
-  genre: document.getElementById("genre").value,
-  songTitle: document.getElementById("songTitle").value
+  special: $("special").value,
+  genre: $("genre").value,
+  songTitle: $("songTitle").value
 });
 
-const albumPrompt = buildAlbumPrompt({
-  petName: document.getElementById("petName").value,
-  species: document.getElementById("species").value,
-  breed: document.getElementById("breed").value,
-  phys: document.getElementById("physicalDescription").value,
-  extras: document.getElementById("extras").value,
-  genre: document.getElementById("genre").value,
-  songTitle: document.getElementById("songTitle").value
-});
-  
-// detect selected tier
-const tier = document.querySelector('input[name="tier"]:checked').value;
-
-// build prompts safely
-const songPrompt = document.getElementById("songOutput")?.textContent || "";
+// Generate album prompt ONLY if Paw Deluxe AND photo uploaded
 let albumPrompt = "";
 
-// only generate album prompt for Paw Deluxe
-if (tier === "song+cover") {
-  albumPrompt = document.getElementById("artOutput")?.textContent || "";
+const tier = document.querySelector('input[name="tier"]:checked').value;
+const hasPhoto = fileInput.files.length > 0;
+
+if (tier === "song+cover" && hasPhoto) {
+  albumPrompt = buildAlbumPrompt({
+    petName: $("petName").value,
+    species: $("species").value,
+    breed: $("breed").value,
+    phys: $("physicalDescription").value,
+    extras: $("extras").value,
+    genre: $("genre").value,
+    songTitle: $("songTitle").value
+  });
 }
+
 
 // build JSON payload
 const payload = {
