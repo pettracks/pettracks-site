@@ -780,18 +780,24 @@ function enforceLimits(dropdownId, groupName, max){
 function val(id){ return normalize($(id)?.value); }
 
 function validateSong(){
-  const errs=[];
+  const errs = [];
+
+  // Required basic fields
   if(!val("customerName")) errs.push("Your name is required.");
   if(!val("customerEmail")) errs.push("Email is required.");
   if(!val("petName")) errs.push("Pet name is required.");
 
-  const p=getDropdownSelected("personality");
-  const d=getDropdownSelected("descriptors");
-  const f=getDropdownSelected("favs");
+  // NEW REQUIRED FIELD ↓
+  if(!val("physicalDescription")) errs.push("Physical description is required.");
 
-  if(p.length!==3) errs.push("Pick 3 personality keywords.");
-  if(d.length!==3) errs.push("Pick 3 descriptive words.");
-  if(f.length<2 || f.length>3) errs.push("Pick 2–3 favorite things.");
+  // Required dropdown selections
+  const p = getDropdownSelected("personality");
+  const d = getDropdownSelected("descriptors");
+  const f = getDropdownSelected("favs");
+
+  if(p.length !== 3) errs.push("Pick 3 personality keywords.");
+  if(d.length !== 3) errs.push("Pick 3 descriptive words.");
+  if(f.length < 2 || f.length > 3) errs.push("Pick 2–3 favorite things.");
 
   return errs;
 }
@@ -934,6 +940,14 @@ async function uploadImageToCloudinary(file) {
 
 document.getElementById("pettracksForm").addEventListener("submit", async function (e) {
   e.preventDefault();
+
+  // --- VALIDATE REQUIRED FIELDS ---
+  const errors = validateSong();
+
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return; // STOP form submission
+  }
 
   const form = document.getElementById("pettracksForm");
   const fileInput = document.getElementById("petPhoto");
